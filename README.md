@@ -18,7 +18,7 @@ Most homelab platforms (like Umbrel, CasaOS, or Proxmox) demand total hardware c
 
 **Yantr flips the model.**
 
-It is a lightweight, self-hosted App Store that runs *alongside* your existing OS. Whether you are using a daily-driver MacBook, a gaming PC, or an existing Linux server, Yantr lets you spin up powerful software instantly without taking over your machine.
+It is a lightweight, self-hosted App Store that runs _alongside_ your existing OS. Whether you are using a daily-driver MacBook, a gaming PC, or an existing Linux server, Yantr lets you spin up powerful software instantly without taking over your machine.
 
 - **Zero OS Footprint:** Yantr never touches your host filesystem. Everything runs exclusively in isolated Docker containers and virtual volumes.
 - **No Dependency Hell:** Run complex AI models, media servers, and databases simultaneously. Because everything is isolated, you will never face a Python, Node, or CUDA version conflict.
