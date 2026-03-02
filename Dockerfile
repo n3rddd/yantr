@@ -40,4 +40,4 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
 ENV PORT=5252
 ENV NODE_ENV=production
 
-CMD ["node", "daemon/main.js"]
+CMD ["node", "daemon/index.js"]
