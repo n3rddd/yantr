@@ -1,187 +1,79 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { Sparkles, ArrowUpRight, Zap } from "lucide-vue-next";
+import { Heart, ArrowUpRight, MessageCircle, Zap, Star } from "lucide-vue-next";
 
-const sponsor = ref(null);
-const visible = ref(false);
-
-onMounted(async () => {
-  try {
-    const res = await fetch(`https://ipfs.io/ipns/ads.yantr.org?_=${Math.floor(Date.now() / 3600000)}`, {
-      cache: "no-store",
-    });
-    if (!res.ok) return;
-    const data = await res.json();
-    const entry = data[Math.floor(Math.random() * data.length)];
-    if (entry?.heading && entry?.link?.url && entry?.link?.cta) {
-      sponsor.value = entry;
-      // Slight delay so entrance animation is visible
-      setTimeout(() => (visible.value = true), 200);
-    }
-  } catch {
-    // Silently fail — no sponsor card shown
-  }
-});
+const perks = [
+  { icon: MessageCircle, text: "Direct 1-on-1 support with core developers" },
+  { icon: Zap,           text: "Priority feature requests & bug fixes" },
+  { icon: Star,          text: "Sponsor badge in the project" },
+];
 </script>
 
 <template>
-  <transition
-    enter-active-class="transition-all duration-700 ease-out"
-    enter-from-class="opacity-0 scale-95 translate-y-3"
-    enter-to-class="opacity-100 scale-100 translate-y-0"
-  >
-    <a
-      v-if="visible && sponsor"
-      :href="sponsor.link.url"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="sponsor-card relative group h-full flex flex-col rounded-xl overflow-hidden focus:outline-none cursor-pointer"
-    >
-      <!-- Animated gradient border (always on) -->
-      <div class="animated-border absolute inset-0 rounded-xl p-[1.5px]">
-        <div class="absolute inset-0 rounded-xl bg-white dark:bg-[#0A0A0A]"></div>
+  <div class="group relative flex flex-col h-full rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-[#0A0A0A] overflow-hidden transition-all duration-300 hover:border-violet-300 dark:hover:border-violet-800 hover:-translate-y-1 hover:shadow-xl hover:shadow-violet-500/10">
+
+    <!-- Hover glow line at top -->
+    <div class="absolute top-0 left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-violet-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+    <!-- Dot-grid pattern (hover reveal) -->
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMTM5LCA5MiwgMjQ2LCAwLjA3KSIvPjwvc3ZnPg==')] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+
+    <div class="relative z-10 flex flex-col h-full p-5">
+
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-violet-300/60 dark:border-violet-700/60 bg-violet-50 dark:bg-violet-950/40">
+          <span class="relative flex h-1.5 w-1.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-violet-500"></span>
+          </span>
+          <span class="text-[9px] font-bold uppercase tracking-[0.2em] text-violet-600 dark:text-violet-400">Support</span>
+        </div>
+        <div class="w-8 h-8 rounded-lg bg-violet-50 dark:bg-violet-950/40 border border-violet-200/60 dark:border-violet-800/50 flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:bg-violet-100 dark:group-hover:bg-violet-900/40">
+          <Heart class="w-4 h-4 text-violet-500 transition-all duration-300 group-hover:fill-violet-500" />
+        </div>
       </div>
 
-      <!-- Pulsing ambient glow behind card -->
-      <div class="absolute inset-0 rounded-xl bg-violet-500/5 dark:bg-violet-500/5 group-hover:bg-violet-500/10 transition-all duration-700 blur-sm scale-105"></div>
+      <!-- Headline -->
+      <h3 class="text-sm font-semibold text-gray-900 dark:text-white tracking-tight leading-snug mb-1">
+        Support Yantr Development
+      </h3>
+      <p class="text-[11px] text-gray-500 dark:text-zinc-500 leading-relaxed mb-4">
+        Sponsoring keeps this project free &amp; actively maintained.
+      </p>
 
-      <!-- Sweeping shimmer on hover -->
-      <div class="shimmer absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none rounded-xl"></div>
-
-      <!-- Dot grid -->
-      <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMTM5LCA5MiwgMjQ2LCAwLjEpIi8+PC9zdmc+')] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none [mask-image:linear-gradient(to_bottom,white,transparent)]"></div>
-
-      <!-- Lift + scale on hover -->
-      <div class="relative z-10 flex flex-col h-full p-5 transition-transform duration-300 group-hover:-translate-y-0.5">
-
-        <!-- Top badge row -->
-        <div class="flex items-center justify-between mb-4">
-          <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-violet-300/60 dark:border-violet-700/60 bg-violet-50 dark:bg-violet-950/40">
-            <!-- Live dot -->
-            <span class="relative flex h-1.5 w-1.5">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-violet-500"></span>
-            </span>
-            <span class="text-[9px] font-bold uppercase tracking-[0.2em] text-violet-600 dark:text-violet-400">Sponsor</span>
-          </div>
-
-          <!-- Icon that spins on hover -->
-          <div class="w-8 h-8 rounded-lg bg-violet-50 dark:bg-violet-950/40 border border-violet-200/60 dark:border-violet-800/50 flex items-center justify-center transition-all duration-500 group-hover:rotate-12 group-hover:scale-110 group-hover:bg-violet-100 dark:group-hover:bg-violet-900/40">
-            <Sparkles class="w-4 h-4 text-violet-500 group-hover:text-violet-600 dark:group-hover:text-violet-300 transition-colors duration-300" />
-          </div>
-        </div>
-
-        <!-- Heading -->
-        <h3 class="text-sm font-semibold text-gray-900 dark:text-white tracking-tight leading-snug line-clamp-2 mb-2 transition-colors duration-300 group-hover:text-violet-600 dark:group-hover:text-violet-300">
-          {{ sponsor.heading }}
-        </h3>
-
-        <!-- Subheading -->
-        <p
-          v-if="sponsor.subheading"
-          class="text-xs text-gray-500 dark:text-zinc-400 leading-relaxed line-clamp-3 flex-1 mb-4 transition-colors duration-300 group-hover:text-gray-600 dark:group-hover:text-zinc-300"
+      <!-- Perks -->
+      <ul class="flex flex-col gap-2 mb-4">
+        <li
+          v-for="perk in perks"
+          :key="perk.text"
+          class="flex items-center gap-2"
         >
-          {{ sponsor.subheading }}
-        </p>
-
-        <!-- CTA button — slides & glows on hover -->
-        <div class="mt-auto">
-          <div class="cta-btn relative flex items-center justify-between w-full px-4 py-2.5 rounded-lg border border-violet-300/50 dark:border-violet-700/40 bg-violet-50/80 dark:bg-violet-950/30 overflow-hidden transition-all duration-300 group-hover:border-violet-400 dark:group-hover:border-violet-600 group-hover:bg-violet-100/80 dark:group-hover:bg-violet-900/40 group-hover:shadow-lg group-hover:shadow-violet-400/10">
-            <!-- Button shimmer sweep -->
-            <div class="btn-shimmer absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none"></div>
-
-            <div class="flex items-center gap-2 relative z-10">
-              <Zap class="w-3.5 h-3.5 text-violet-500 transition-transform duration-300 group-hover:scale-110" />
-              <span class="text-xs font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wider">
-                {{ sponsor.link.cta }}
-              </span>
-            </div>
-
-            <ArrowUpRight
-              class="relative z-10 w-3.5 h-3.5 text-violet-500 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-violet-600 dark:group-hover:text-violet-300"
-            />
+          <div class="shrink-0 w-5 h-5 rounded-md bg-violet-50 dark:bg-violet-950/40 border border-violet-200/50 dark:border-violet-800/50 flex items-center justify-center">
+            <component :is="perk.icon" class="w-2.5 h-2.5 text-violet-500" />
           </div>
-        </div>
+          <span class="text-[11px] text-gray-600 dark:text-zinc-400 leading-tight">{{ perk.text }}</span>
+        </li>
+      </ul>
+
+      <!-- CTA -->
+      <div class="mt-auto">
+        <a
+          href="https://sponsor.besoeasy.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group/cta relative flex items-center justify-between w-full px-4 py-2.5 rounded-lg border border-violet-300/50 dark:border-violet-700/40 bg-violet-50/80 dark:bg-violet-950/30 overflow-hidden transition-all duration-300 hover:border-violet-400 dark:hover:border-violet-600 hover:bg-violet-100/80 dark:hover:bg-violet-900/40 hover:shadow-lg hover:shadow-violet-400/10"
+        >
+          <div class="flex items-center gap-2">
+            <Heart class="w-3.5 h-3.5 text-violet-500 transition-all duration-300 group-hover/cta:fill-violet-500" />
+            <span class="text-xs font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wider">
+              Become a Sponsor
+            </span>
+          </div>
+          <ArrowUpRight class="w-3.5 h-3.5 text-violet-500 transition-all duration-300 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5" />
+        </a>
       </div>
-    </a>
-  </transition>
+
+    </div>
+  </div>
 </template>
 
-<style scoped>
-/* ── Animated spinning-conic gradient border ── */
-.animated-border::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 0.75rem;
-  padding: 1.5px;
-  background: conic-gradient(
-    from var(--angle, 0deg),
-    transparent 20%,
-    #7c3aed 40%,
-    #a78bfa 50%,
-    #7c3aed 60%,
-    transparent 80%
-  );
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  animation: spin-border 3s linear infinite;
-}
-
-@property --angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-
-@keyframes spin-border {
-  to {
-    --angle: 360deg;
-  }
-}
-
-/* ── Card-level shimmer sweep ── */
-.shimmer::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 30%,
-    rgba(139, 92, 246, 0.08) 50%,
-    transparent 70%
-  );
-  transform: translateX(-100%);
-  animation: shimmer-sweep 1.4s ease-in-out infinite;
-}
-
-@keyframes shimmer-sweep {
-  to {
-    transform: translateX(100%);
-  }
-}
-
-/* ── CTA button shimmer ── */
-.btn-shimmer::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 20%,
-    rgba(139, 92, 246, 0.15) 50%,
-    transparent 80%
-  );
-  transform: translateX(-100%);
-  animation: btn-sweep 1.8s ease-in-out infinite;
-}
-
-@keyframes btn-sweep {
-  to {
-    transform: translateX(200%);
-  }
-}
-</style>
