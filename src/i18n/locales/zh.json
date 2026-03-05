@@ -42,7 +42,8 @@
       "buildData": "构建数据",
       "github": "GitHub",
       "reportIssue": "报告问题",
-      "buildInfo": "构建信息"
+      "buildInfo": "构建信息",
+      "telegram": "Telegram"
     },
     "otherContainersGrid": {
       "inspect": "检查",

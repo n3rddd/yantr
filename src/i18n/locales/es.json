@@ -42,7 +42,8 @@
       "buildData": "Datos de compilación",
       "github": "GitHub",
       "reportIssue": "Reportar problema",
-      "buildInfo": "Info de compilación"
+      "buildInfo": "Info de compilación",
+      "telegram": "Telegram"
     },
     "otherContainersGrid": {
       "inspect": "Inspeccionar",

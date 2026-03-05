@@ -1,6 +1,6 @@
 <script setup>
 import { useI18n } from "vue-i18n";
-import { Github, Bug, ExternalLink, Link2, GitBranch } from "lucide-vue-next";
+import { Github, Bug, ExternalLink, Link2, GitBranch, Send } from "lucide-vue-next";
 
 const { t } = useI18n();
 
@@ -16,6 +16,12 @@ const links = [
     href: "https://github.com/besoeasy/yantr/issues",
     icon: Bug,
     color: "text-amber-500",
+  },
+  {
+    title: t("home.externalLinks.telegram"),
+    href: "https://t.me/+h4RvCk63PxUyODQ1",
+    icon: Send,
+    color: "text-sky-500",
   },
 ];
 

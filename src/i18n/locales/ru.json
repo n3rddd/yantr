@@ -42,7 +42,8 @@
       "buildData": "Данные сборки",
       "github": "GitHub",
       "reportIssue": "Сообщить о проблеме",
-      "buildInfo": "Информация о сборке"
+      "buildInfo": "Информация о сборке",
+      "telegram": "Telegram"
     },
     "otherContainersGrid": {
       "inspect": "Просмотр",
