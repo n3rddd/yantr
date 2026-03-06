@@ -20,7 +20,7 @@
     "Connect to various LLM providers.",
     "Private AI assistant gateway."
   ],
-  "website": "https://github.com/theonlyhennygod/zeroclaw",
+  "website": "https://github.com/zeroclaw-labs/zeroclaw",
   "dependencies": [],
   "notes": [
     "Multiple LLM provider support",
