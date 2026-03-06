@@ -13,6 +13,7 @@ const templatesDir = path.join(websiteDir, 'templates');
 const appsJsonPath = path.join(websiteDir, 'apps.json');
 const appsOutputDir = path.join(websiteDir, 'apps');
 const appsDir = path.join(__dirname, 'apps');
+const siteUrl = 'https://yantr.org';
 
 function parseAppFolder(appId, appPath) {
   const infoPath = path.join(appPath, 'info.json');
@@ -145,22 +146,31 @@ function toAppViewModel(app) {
   const id = app?.id || 'unknown-app';
   const name = app?.name || id;
   const dependencies = Array.isArray(app?.dependencies) ? app.dependencies : [];
+  const tags = Array.isArray(app?.tags) ? app.tags : [];
+  const primaryTag = tags[0] || 'self-hosted';
+  const summary = app?.short_description || app?.description || 'No description available.';
+  const appUrl = `${siteUrl}/apps/${id}/`;
 
   return {
     ...app,
     id,
     name,
     dependencies,
-    tags: Array.isArray(app?.tags) ? app.tags : [],
+    tags,
     notes: Array.isArray(app?.notes) ? app.notes : [],
     short_description: app?.short_description || '',
     description: app?.description || app?.short_description || 'No description available.',
     usecases: Array.isArray(app?.usecases) ? app.usecases : [],
     logoUrl: getLogoUrl(app),
+    summary,
+    primaryTag,
+    appUrl,
     appPagePath: `/apps/${id}/`,
     sourceComposeUrl: `https://github.com/besoeasy/yantr/blob/main/apps/${id}/compose.yml`,
     sourceInfoUrl: `https://github.com/besoeasy/yantr/blob/main/apps/${id}/info.json`,
     sourceAppFolderUrl: `https://github.com/besoeasy/yantr/tree/main/apps/${id}`,
+    appSearchIntentTitle: `${name} Docker Compose Setup`,
+    appSearchIntentDescription: `Learn how to self-host ${name} with Docker Compose using Yantr. ${summary}`,
   };
 }
 
@@ -175,6 +185,48 @@ function getRelatedApps(app, allApps, count = 3) {
   return others.slice(0, count);
 }
 
+function buildCatalogPage(env, apps, generatedAt) {
+  const catalogDir = path.join(websiteDir, 'catalog');
+  fs.mkdirSync(catalogDir, { recursive: true });
+
+  const html = env.render('catalog.njk', {
+    apps,
+    generatedAt,
+    pageTitle: 'App Catalog | Yantr',
+    pageDescription: `Browse ${apps.length}+ self-hosted apps you can run with Docker using Yantr. Find app pages for installation, ports, dependencies, and Docker Compose details.`,
+    pageUrl: `${siteUrl}/catalog/`,
+    tags: [...new Set(apps.flatMap((app) => app.tags))].sort(),
+  });
+
+  fs.writeFileSync(path.join(catalogDir, 'index.html'), html, 'utf8');
+}
+
+function buildSitemap(apps, generatedAt) {
+  const staticPages = [
+    { url: `${siteUrl}/`, priority: '1.0', changefreq: 'weekly' },
+    { url: `${siteUrl}/catalog/`, priority: '0.9', changefreq: 'daily' },
+    { url: `${siteUrl}/install-docker/`, priority: '0.8', changefreq: 'monthly' },
+  ];
+
+  const appPages = apps.map((app) => ({
+    url: app.appUrl,
+    priority: '0.8',
+    changefreq: 'weekly',
+  }));
+
+  const urls = [...staticPages, ...appPages]
+    .map(({ url, priority, changefreq }) => `  <url>\n    <loc>${url}</loc>\n    <lastmod>${generatedAt}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`)
+    .join('\n');
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
+  fs.writeFileSync(path.join(websiteDir, 'sitemap.xml'), xml, 'utf8');
+}
+
+function buildRobotsTxt() {
+  const robots = `User-agent: *\nAllow: /\n\nSitemap: ${siteUrl}/sitemap.xml\n`;
+  fs.writeFileSync(path.join(websiteDir, 'robots.txt'), robots, 'utf8');
+}
+
 function buildPages() {
   buildAppsJson();
 
@@ -186,9 +238,12 @@ function buildPages() {
   const content = fs.readFileSync(appsJsonPath, 'utf8');
   const parsed = JSON.parse(content);
   const apps = (Array.isArray(parsed?.apps) ? parsed.apps : []).map(toAppViewModel);
+  const generatedAt = new Date().toISOString();
 
   fs.rmSync(appsOutputDir, { recursive: true, force: true });
   fs.mkdirSync(appsOutputDir, { recursive: true });
+
+  buildCatalogPage(env, apps, generatedAt);
 
   for (const app of apps) {
     const appDir = path.join(appsOutputDir, app.id);
@@ -203,15 +258,18 @@ function buildPages() {
     const html = env.render('app.njk', {
       app,
       relatedApps,
-      nowIso: new Date().toISOString(),
+      nowIso: generatedAt,
       pageTitle: `Self-Host ${app.name} with Docker | Yantr`,
       pageDescription,
-      pageUrl: `https://yantr.org/apps/${app.id}/`,
+      pageUrl: app.appUrl,
       imageUrl: app.logoUrl,
     });
 
     fs.writeFileSync(path.join(appDir, 'index.html'), html, 'utf8');
   }
+
+  buildSitemap(apps, generatedAt);
+  buildRobotsTxt();
 
   console.log(`✨ Generated ${apps.length} app pages in ${appsOutputDir}`);
 }

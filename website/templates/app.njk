@@ -8,6 +8,7 @@
     <meta name="keywords" content="{{ app.name }}, self-host {{ app.name }}, install {{ app.name }} docker, {{ app.name }} homelab, {{ app.name }} self-hosted, docker compose {{ app.name }}{% if app.tags.length %}, {{ app.tags | join(', ') }}{% endif %}, yantr, self-hosted apps" />
     <meta name="theme-color" content="#ffffff" />
     <link rel="canonical" href="{{ pageUrl }}" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
 
     <script type="application/ld+json">
     {
@@ -27,6 +28,52 @@
       }{% if app.website %},
       "sameAs": "{{ app.website }}"{% endif %}{% if app.usecases.length %},
       "featureList": [{% for uc in app.usecases %}"{{ uc }}"{% if not loop.last %}, {% endif %}{% endfor %}]{% endif %}
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Yantr",
+          "item": "https://yantr.org/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "App Catalog",
+          "item": "https://yantr.org/catalog/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "{{ app.name }}",
+          "item": "{{ pageUrl }}"
+        }
+      ]
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "{{ pageTitle }}",
+      "description": "{{ pageDescription }}",
+      "url": "{{ pageUrl }}",
+      "about": {
+        "@type": "Thing",
+        "name": "{{ app.name }}"
+      },
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "Yantr",
+        "url": "https://yantr.org/"
+      }
     }
     </script>
 
@@ -119,6 +166,14 @@
             <p class="text-sm sm:text-base text-gray-700 dark:text-zinc-300 leading-relaxed">{{ app.description }}</p>
           </section>
         {% endif %}
+
+        <section class="mt-6 rounded-2xl border border-gray-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-8">
+          <h2 class="text-[10px] uppercase tracking-[0.2em] text-gray-400 dark:text-zinc-500 mb-3">How to Self-Host {{ app.name }}</h2>
+          <div class="space-y-4 text-sm sm:text-base text-gray-700 dark:text-zinc-300 leading-relaxed">
+            <p>{{ app.name }} can be deployed with standard Docker Compose using the Yantr app catalog. This page collects the basic information searchers usually need first: what {{ app.name }} does, which Docker image Yantr uses, default ports, dependencies, and where to find the original compose template.</p>
+            <p>If you searched for {{ app.name }} Docker, {{ app.name }} Docker Compose, or self-host {{ app.name }}, this page is the direct landing page for that app in Yantr's catalog.</p>
+          </div>
+        </section>
 
         <!-- Use Cases -->
         {% if app.usecases.length %}
@@ -249,6 +304,15 @@
             </div>
           </section>
         {% endif %}
+
+        <section class="mt-8 rounded-2xl border border-gray-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-8">
+          <h2 class="text-[10px] uppercase tracking-[0.2em] text-gray-400 dark:text-zinc-500 mb-4">More App Pages</h2>
+          <p class="text-sm text-gray-600 dark:text-zinc-400 leading-relaxed">Explore the full app catalog for more self-hosted services, alternatives, and dependencies that work alongside {{ app.name }}.</p>
+          <div class="mt-4 flex flex-wrap gap-3">
+            <a href="../../catalog/" class="inline-flex items-center gap-2 justify-center px-5 py-2.5 text-sm font-semibold rounded-xl border border-gray-200 dark:border-zinc-700 hover:border-black dark:hover:border-white transition-colors">Browse the catalog</a>
+            <a href="{{ app.sourceComposeUrl }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 justify-center px-5 py-2.5 text-sm font-semibold rounded-xl border border-gray-200 dark:border-zinc-700 hover:border-black dark:hover:border-white transition-colors">View compose.yml</a>
+          </div>
+        </section>
 
         <p class="mt-8 text-xs text-gray-400 dark:text-zinc-600">Page generated {{ nowIso }}</p>
       </div>
