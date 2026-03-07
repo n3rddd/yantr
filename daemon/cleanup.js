@@ -2,6 +2,7 @@ import Docker from "dockerode";
 import { readFile, access } from "fs/promises";
 import { resolveComposeCommand } from "./compose.js";
 import { spawnProcess, getBaseAppId } from "./utils.js";
+import { cleanupExpiredBrowsers } from "./dufs.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -272,11 +273,13 @@ export function startCleanupScheduler(intervalMinutes = 60) {
   cleanupExpiredApps().catch((err) => {
     log("error", `Initial cleanup failed: ${err.message}`);
   });
+  cleanupExpiredBrowsers();
 
   // Run cleanup on interval
   setInterval(() => {
     cleanupExpiredApps().catch((err) => {
       log("error", `Scheduled cleanup failed: ${err.message}`);
     });
+    cleanupExpiredBrowsers();
   }, intervalMs);
 }

@@ -8,6 +8,9 @@ const browsers = new Map()
 // calls from getting the same port during the TOCTOU window
 const reservedPorts = new Set()
 
+// Auto-expire browsers every minute
+setInterval(cleanupExpiredBrowsers, 60_000).unref()
+
 function findFreePort() {
   return new Promise((resolve, reject) => {
     const server = createServer()
@@ -81,6 +84,18 @@ export function listBrowsers() {
     port,
     expireAt,
   }))
+}
+
+export function cleanupExpiredBrowsers() {
+  const now = Math.floor(Date.now() / 1000)
+  for (const [volumeName, { process: proc, port, expireAt }] of browsers) {
+    if (expireAt !== null && now >= expireAt) {
+      log('info', `Volume browser for "${volumeName}" expired, stopping`)
+      try { proc.kill() } catch {}
+      reservedPorts.delete(port)
+      browsers.delete(volumeName)
+    }
+  }
 }
 
 export function stopAll() {
