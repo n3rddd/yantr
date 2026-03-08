@@ -602,7 +602,8 @@
     "updateStack": "更新",
     "updating": "更新中…",
     "updatingStack": "{name} の最新イメージを取得中…",
-    "updateComplete": "更新完了 — コンテナは最新イメージで動作しています",
+    "updateComplete": "{count} 個のコンテナが最新イメージに更新されました",
+    "updateAlreadyLatest": "最新の状態です — 新しいイメージは見つかりませんでした",
     "updateFailed": "更新失敗"
   },
   "appCard": {

@@ -31,15 +31,19 @@ async function updateStack() {
   updating.value = true;
   toast.info(t('stackView.updatingStack', { name: stack.value.app?.name || projectId.value }));
   try {
-    const containerNames = stack.value.services.map(s => s.name).filter(Boolean);
+    const containerIds = stack.value.services.map(s => s.id).filter(Boolean);
     const res = await fetch(`${apiUrl.value}/api/autoupdate/run`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ containerNames }),
+      body: JSON.stringify({ containerIds }),
     });
     const data = await res.json();
     if (data.success) {
-      toast.success(t('stackView.updateComplete'));
+      if (data.updatedCount > 0) {
+        toast.success(t('stackView.updateComplete', { count: data.updatedCount }));
+      } else {
+        toast.info(t('stackView.updateAlreadyLatest'));
+      }
       await fetchStack();
     } else {
       toast.error(data.error || t('stackView.updateFailed'));

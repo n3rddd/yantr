@@ -602,7 +602,8 @@
     "updateStack": "Actualizar",
     "updating": "Actualizando…",
     "updatingStack": "Obteniendo las últimas imágenes para {name}…",
-    "updateComplete": "Actualización completada — los contenedores usan las últimas imágenes",
+    "updateComplete": "{count} contenedor(es) actualizado(s) a la última imagen",
+    "updateAlreadyLatest": "Ya está actualizado — no se encontraron nuevas imágenes",
     "updateFailed": "Error en la actualización"
   },
   "appCard": {

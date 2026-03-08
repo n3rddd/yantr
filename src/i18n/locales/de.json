@@ -602,7 +602,8 @@
     "updateStack": "Aktualisieren",
     "updating": "Aktualisierung…",
     "updatingStack": "Neueste Images für {name} werden geladen…",
-    "updateComplete": "Aktualisierung abgeschlossen – Container laufen mit den neuesten Images",
+    "updateComplete": "{count} Container wurde(n) auf das neueste Image aktualisiert",
+    "updateAlreadyLatest": "Bereits aktuell — keine neuen Images gefunden",
     "updateFailed": "Aktualisierung fehlgeschlagen"
   },
   "appCard": {

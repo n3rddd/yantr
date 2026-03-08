@@ -6,14 +6,31 @@ import { runUpdate, runSelfUpdate } from "../autoupdate.js";
 
 export default async function systemRoutes(fastify) {
 
-  // POST /api/autoupdate/run  — update specific containers by name (per-stack)
+  // POST /api/autoupdate/run  — update specific containers by ID (per-stack)
   fastify.post("/api/autoupdate/run", async (request, reply) => {
-    const { containerNames } = request.body || {};
-    if (!Array.isArray(containerNames) || containerNames.length === 0)
-      return reply.code(400).send({ success: false, error: "containerNames array is required" });
+    const { containerIds } = request.body || {};
+    if (!Array.isArray(containerIds) || containerIds.length === 0)
+      return reply.code(400).send({ success: false, error: "containerIds array is required" });
+
+    // Resolve IDs to current names via Docker API — never trust client-supplied names
+    let containerNames;
+    try {
+      const containers = await docker.listContainers({ all: false });
+      const idSet = new Set(containerIds);
+      containerNames = containers
+        .filter(c => idSet.has(c.Id) || containerIds.some(id => c.Id.startsWith(id)))
+        .map(c => c.Names?.[0]?.replace(/^\//, ""))
+        .filter(Boolean);
+    } catch (e) {
+      return reply.code(500).send({ success: false, error: `Failed to resolve container IDs: ${e.message}` });
+    }
+
+    if (!containerNames.length)
+      return reply.code(404).send({ success: false, error: "None of the provided container IDs are currently running" });
+
     const result = await runUpdate(containerNames);
     if (result.error) return reply.code(500).send({ success: false, error: result.error });
-    return reply.send({ success: true, exitCode: result.exitCode, output: result.stdout, warnings: result.stderr });
+    return reply.send({ success: true, exitCode: result.exitCode, updatedCount: result.updatedCount, output: result.stdout, warnings: result.stderr });
   });
 
   // POST /api/autoupdate/self  — update yantr itself

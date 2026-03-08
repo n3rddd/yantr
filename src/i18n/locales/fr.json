@@ -602,7 +602,8 @@
     "updateStack": "Mettre à jour",
     "updating": "Mise à jour…",
     "updatingStack": "Récupération des dernières images pour {name}…",
-    "updateComplete": "Mise à jour terminée — les conteneurs utilisent les dernières images",
+    "updateComplete": "{count} conteneur(s) mis à jour vers la dernière image",
+    "updateAlreadyLatest": "Déjà à jour — aucune nouvelle image trouvée",
     "updateFailed": "Échec de la mise à jour"
   },
   "appCard": {

@@ -29,11 +29,16 @@ async function runWatchtower(containerArgs, label) {
     ], { env: { ...process.env, DOCKER_HOST: `unix://${socketPath}`, DOCKER_API_VERSION: "1.44" } });
 
     if (exitCode === 0) {
-      log("info", `🔄 [${label}] Completed successfully`);
+      // Watchtower logs 'msg="Updated <name>"' for each container it actually pulls+restarts.
+      // Count those lines to distinguish "pulled new image" from "already up to date".
+      const allOutput = stdout + stderr;
+      const updatedMatches = allOutput.match(/msg="Updated /g);
+      const updatedCount = updatedMatches ? updatedMatches.length : 0;
+      log("info", `🔄 [${label}] Completed — ${updatedCount} container(s) updated`);
+      return { exitCode, stdout, stderr, updatedCount };
     } else {
       log("warn", `🔄 [${label}] Finished with exit code ${exitCode}: ${stderr.trim()}`);
-    }
-    return { exitCode, stdout, stderr };
+      return { exitCode, stdout, stderr, updatedCount: 0 };
   } catch (e) {
     log("error", `🔄 [${label}] Failed: ${e.message}`);
     return { error: e.message };

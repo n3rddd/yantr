@@ -602,7 +602,8 @@
     "updateStack": "Update",
     "updating": "Updating…",
     "updatingStack": "Pulling latest images for {name}…",
-    "updateComplete": "Update complete — containers are running the latest images",
+    "updateComplete": "{count} container(s) updated to the latest image",
+    "updateAlreadyLatest": "Already up to date — no new images found",
     "updateFailed": "Update failed"
   },
   "appCard": {
