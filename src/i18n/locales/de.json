@@ -160,6 +160,8 @@
     "varName": "NAME",
     "varValue": "Wert",
     "customVarsHint": "Keine zusätzlichen Variablen. Klicken Sie auf \"Variable hinzufügen\" um eigene Umgebungsvariablen beim Deployment zu setzen.",
+    "autoUpdate": "Automatisches Update",
+    "autoUpdateDesc": "Erfordert Watchtower. Aktualisiert diesen Container automatisch, wenn ein neues Image verfügbar ist.",
     "noDependenciesToFill": "Keine Abhängigkeiten zum Ausfüllen",
     "noMatchingVariables": "Keine passenden Variablen gefunden",
     "filledVariables": "{count} Variable{plural} aus Abhängigkeiten ausgefüllt",

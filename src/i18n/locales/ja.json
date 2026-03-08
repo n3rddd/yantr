@@ -160,6 +160,8 @@
     "varName": "名前",
     "varValue": "値",
     "customVarsHint": "追加変数はありません。\"変数を追加\"をクリックしてデプロイ時にカスタム環境変数を注入できます。",
+    "autoUpdate": "自動更新",
+    "autoUpdateDesc": "Watchtowerが必要です。新しいイメージが利用可能になったとき、このコンテナを自動的に更新します。",
     "noDependenciesToFill": "入力する依存関係がありません",
     "noMatchingVariables": "一致する変数が見つかりません",
     "filledVariables": "依存関係から{count}個の変数を入力しました",

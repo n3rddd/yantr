@@ -160,6 +160,8 @@
     "varName": "NAME",
     "varValue": "value",
     "customVarsHint": "No extra variables. Click \"Add Variable\" to inject custom env vars at deploy time.",
+    "autoUpdate": "Auto Update",
+    "autoUpdateDesc": "Requires Watchtower. Automatically pulls and restarts this container when a new image is available.",
     "noDependenciesToFill": "No dependencies to fill from",
     "noMatchingVariables": "No matching variables found in dependencies",
     "filledVariables": "Filled {count} variable{plural} from dependencies",

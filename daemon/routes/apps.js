@@ -72,7 +72,7 @@ export default async function appsRoutes(fastify) {
   fastify.post("/api/deploy", async (request, reply) => {
     log("info", "🚀 [POST /api/deploy] Deploy request received");
     try {
-      const { appId, environment, extraEnv, expiresIn, customPortMappings, instanceId, allowMissingDependencies } = request.body;
+      const { appId, environment, extraEnv, autoUpdate, expiresIn, customPortMappings, instanceId, allowMissingDependencies } = request.body;
       log("info", `🚀 [POST /api/deploy] Deploying app: ${appId}${instanceId > 1 ? ` (Instance #${instanceId})` : ""}`);
 
       if (!appId) {

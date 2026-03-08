@@ -11,4 +11,5 @@ services:
       DOCKER_API_VERSION: "1.44"
       WATCHTOWER_CLEANUP: "true"
       WATCHTOWER_SCHEDULE: "0 */3 * * *"
+      WATCHTOWER_LABEL_ENABLE: "true"
     restart: unless-stopped

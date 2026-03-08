@@ -27,6 +27,7 @@ const expirationHours = ref(24);
 const customizePorts = ref(false);
 const customPortMappings = ref({});
 const extraEnvRows = ref([]);
+const autoUpdate = ref(true);
 
 function addExtraEnvRow() {
   extraEnvRows.value.push({ key: '', value: '' });
@@ -394,6 +395,7 @@ async function deployApp() {
       appId: app.value.id,
       environment: envValues.value,
       extraEnv,
+      autoUpdate: autoUpdate.value,
       instanceId: instanceNum, // Pass instance number to backend
     };
 
@@ -747,7 +749,37 @@ onMounted(async () => {
 
               <!-- Options Toggles -->
               <div class="space-y-3 pt-4 border-t border-gray-100 dark:border-zinc-800">
-                
+
+                <!-- Auto Update -->
+                <div
+                  @click="autoUpdate = !autoUpdate"
+                  class="rounded-lg border p-3 cursor-pointer transition-all duration-200"
+                  :class="autoUpdate
+                    ? 'bg-green-50 dark:bg-green-500/10 border-green-200 dark:border-green-500/30'
+                    : 'bg-gray-50 dark:bg-zinc-900/30 border-gray-200 dark:border-zinc-800'"
+                >
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="flex-1 min-w-0">
+                            <span class="block text-[11px] font-bold uppercase tracking-wider"
+                              :class="autoUpdate ? 'text-green-700 dark:text-green-400' : 'text-gray-900 dark:text-zinc-100'"
+                            >{{ t('appDetail.autoUpdate') }}</span>
+                            <p class="text-[10px] mt-0.5"
+                              :class="autoUpdate ? 'text-green-600/80 dark:text-green-500/70' : 'text-gray-500 dark:text-zinc-500'"
+                            >{{ t('appDetail.autoUpdateDesc') }}</p>
+                        </div>
+                        <!-- Pill toggle -->
+                        <div
+                          class="relative shrink-0 w-9 h-5 rounded-full transition-colors duration-200"
+                          :class="autoUpdate ? 'bg-green-500' : 'bg-gray-300 dark:bg-zinc-700'"
+                        >
+                          <span
+                            class="absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-200"
+                            :class="autoUpdate ? 'translate-x-4' : 'translate-x-0.5'"
+                          ></span>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Temporary Install -->
                 <div class="rounded-lg border border-gray-200 dark:border-zinc-800 p-3 transition-colors bg-gray-50 dark:bg-zinc-900/30">
                     <div class="flex items-start gap-3">

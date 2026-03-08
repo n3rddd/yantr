@@ -160,6 +160,8 @@
     "varName": "NOMBRE",
     "varValue": "valor",
     "customVarsHint": "Sin variables extra. Haz clic en \"Agregar variable\" para inyectar variables de entorno personalizadas al desplegar.",
+    "autoUpdate": "Actualizaci\u00f3n autom\u00e1tica",
+    "autoUpdateDesc": "Requiere Watchtower. Actualiza autom\u00e1ticamente este contenedor cuando haya una nueva imagen disponible.",
     "noDependenciesToFill": "No hay dependencias para completar",
     "noMatchingVariables": "No se encontraron variables coincidentes",
     "filledVariables": "Se completaron {count} variable{plural} de dependencias",
