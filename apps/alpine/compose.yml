@@ -1,0 +1,14 @@
+services:
+  alpine:
+    build: .
+    image: alpine-ssh:latest
+    container_name: alpine
+    labels:
+      yantr.app: "alpine"
+      yantr.service: "SSH Server"
+    environment:
+      SSH_USER: ${SSH_USER:-admin}
+      SSH_PASSWORD: ${SSH_PASSWORD:-changeme}
+    ports:
+      - "22"
+    restart: unless-stopped

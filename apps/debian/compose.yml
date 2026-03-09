@@ -1,0 +1,14 @@
+services:
+  debian:
+    build: .
+    image: debian-ssh:latest
+    container_name: debian
+    labels:
+      yantr.app: "debian"
+      yantr.service: "SSH Server"
+    environment:
+      SSH_USER: ${SSH_USER:-admin}
+      SSH_PASSWORD: ${SSH_PASSWORD:-changeme}
+    ports:
+      - "22"
+    restart: unless-stopped

@@ -1,0 +1,30 @@
+{
+  "name": "Debian Linux",
+  "logo": "QmRBnPQrx3BfAUDeCB7Y5Qcy5zp2a1XAFVuZ6Ek2RHro89",
+  "tags": [
+    "linux",
+    "ssh",
+    "terminal",
+    "server",
+    "self-hosted",
+    "utility",
+    "development"
+  ],
+  "ports": [
+    { "port": 22, "protocol": "TCP", "label": "SSH" }
+  ],
+  "short_description": "Debian Linux container accessible over SSH with custom credentials.",
+  "description": "A clean Debian Linux container with an SSH server. Set your username and password via environment variables to connect from any SSH client. Useful as a remote shell, development sandbox, or lightweight Linux environment accessible from anywhere on your network.",
+  "usecases": [
+    "Remote shell access over SSH.",
+    "Lightweight Linux development sandbox.",
+    "Run scripts and tools in an isolated Debian environment."
+  ],
+  "website": "https://www.debian.org",
+  "dependencies": [],
+  "notes": [
+    "Set SSH_USER and SSH_PASSWORD env vars before deploying",
+    "Default credentials are admin / changeme — change before exposing to the network",
+    "Connect with: ssh SSH_USER@<host> -p <mapped-port>"
+  ]
+}
