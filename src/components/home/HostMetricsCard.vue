@@ -116,9 +116,6 @@ onUnmounted(() => {
   <div class="relative group h-full flex flex-col bg-white dark:bg-[#0A0A0A] border border-gray-200 dark:border-zinc-800 rounded-2xl overflow-hidden transition-all duration-300 hover:border-gray-300 dark:hover:border-zinc-700 hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20">
 
     <div class="absolute inset-x-0 top-0 h-px bg-blue-500/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-    <div class="absolute inset-0 pointer-events-none rounded-2xl overflow-hidden">
-      <div class="scan-line absolute left-0 w-full h-px bg-blue-400/30"></div>
-    </div>
 
     <!-- Loading State -->
     <div v-if="loading" class="relative z-10 p-5 flex-1 flex flex-col items-center justify-center min-h-52">
@@ -211,16 +208,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-@keyframes scan {
-  0%   { top: -2px; opacity: 0; }
-  5%   { opacity: 1; }
-  92%  { opacity: 0.8; }
-  100% { top: 100%; opacity: 0; }
-}
-.scan-line {
-  animation: scan 5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
 @keyframes metricPop {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-1px); }
@@ -230,7 +217,6 @@ onUnmounted(() => {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .scan-line,
   .metric-pop {
     animation: none !important;
   }

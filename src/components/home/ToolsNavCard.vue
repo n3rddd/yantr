@@ -30,8 +30,6 @@ const tools = [
       <div class="absolute inset-x-0 top-0 h-0.5 bg-blue-500 opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
       <div class="absolute -left-10 top-8 h-28 w-28 rounded-full bg-blue-500/10 blur-2xl pulse-cloud"></div>
       <div class="absolute right-0 top-0 h-24 w-24 rounded-full bg-emerald-500/10 blur-2xl pulse-cloud" style="animation-delay: 1.2s"></div>
-      <div class="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100 circuit-grid"></div>
-      <div class="scan-line absolute left-0 h-px w-full bg-blue-400/60"></div>
     </div>
 
     <div class="relative z-10 flex h-full flex-col p-6">
@@ -64,7 +62,6 @@ const tools = [
           :style="{ animationDelay: `${index * 120}ms` }"
         >
           <div class="absolute inset-y-0 left-0 w-1 rounded-r-full bg-blue-500/0 transition-colors duration-300 group-hover/btn:bg-blue-500"></div>
-          <div class="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover/btn:opacity-100 btn-grid"></div>
 
           <div class="relative z-10 flex min-w-0 items-center gap-3.5">
             <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-300 group-hover/btn:scale-105 group-hover/btn:border-gray-300 dark:border-zinc-700 dark:bg-zinc-950/70 dark:group-hover/btn:border-zinc-600">
@@ -87,13 +84,6 @@ const tools = [
 </template>
 
 <style scoped>
-@keyframes scan {
-  0% { top: -2px; opacity: 0; }
-  6% { opacity: 1; }
-  90% { opacity: 0.7; }
-  100% { top: 100%; opacity: 0; }
-}
-
 @keyframes pulseCloud {
   0%, 100% { transform: scale(0.92); opacity: 0.4; }
   50% { transform: scale(1.08); opacity: 0.9; }
@@ -112,10 +102,6 @@ const tools = [
 @keyframes rowReveal {
   0% { opacity: 0; transform: translateY(8px); }
   100% { opacity: 1; transform: translateY(0); }
-}
-
-.scan-line {
-  animation: scan 5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .pulse-cloud {
@@ -138,18 +124,7 @@ const tools = [
   animation: rowReveal 500ms ease-out both;
 }
 
-.circuit-grid {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'%3E%3Cpath d='M0 0H22V22' fill='none'/%3E%3Cpath d='M0 0.5H22M0.5 0V22' stroke='rgba(59,130,246,0.08)' stroke-width='1'/%3E%3C/svg%3E");
-  background-size: 22px 22px;
-}
-
-.btn-grid {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18'%3E%3Cpath d='M0 0H18V18' fill='none'/%3E%3Cpath d='M0 0.5H18M0.5 0V18' stroke='rgba(59,130,246,0.06)' stroke-width='1'/%3E%3C/svg%3E");
-  background-size: 18px 18px;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .scan-line,
   .pulse-cloud,
   .icon-shell,
   .icon-float,
