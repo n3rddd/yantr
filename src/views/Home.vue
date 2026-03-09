@@ -23,6 +23,7 @@ import LogsNavCard from "../components/home/LogsNavCard.vue";
 import ExternalLinksCard from "../components/home/ExternalLinksCard.vue";
 import SponsorCard from "../components/home/SponsorCard.vue";
 import OpenCodeCard from "../components/home/OpenCodeCard.vue";
+import DailyAppSpotlightCard from "../components/home/DailyAppSpotlightCard.vue";
 
 const { apiUrl } = useApiUrl();
 const { currentTime } = useCurrentTime();
@@ -36,6 +37,7 @@ function viewContainerDetail(container) {
 const containers = ref([]);
 const volumes = ref([]);
 const images = ref([]);
+const apps = ref([]);
 const volumeBrowsers = ref([]);
 const loading = ref(false);
 const tailscaleInstalled = ref(false);
@@ -47,6 +49,44 @@ let containersRefreshInterval = null;
 const totalApps = computed(() => containers.value.length);
 const runningApps = computed(() => containers.value.filter((c) => c.state === "running").length);
 const totalVolumes = computed(() => volumes.value.length);
+
+const installedAppIds = computed(() => {
+  const ids = new Set(containers.value.map((container) => container?.app?.id).filter(Boolean));
+  return ids;
+});
+
+const runningAppInstanceCounts = computed(() => {
+  const projectsByApp = {};
+  containers.value
+    .filter((container) => container.state === "running")
+    .forEach((container) => {
+      const appId = container?.app?.id;
+      const projectId = container?.app?.projectId;
+      if (!appId || !projectId) return;
+      if (!projectsByApp[appId]) projectsByApp[appId] = new Set();
+      projectsByApp[appId].add(projectId);
+    });
+
+  const counts = {};
+  for (const [appId, projects] of Object.entries(projectsByApp)) {
+    counts[appId] = projects.size;
+  }
+  return counts;
+});
+
+const dailyFeaturedApp = computed(() => {
+  if (apps.value.length === 0) return null;
+
+  const catalog = [...apps.value].sort((left, right) => left.id.localeCompare(right.id));
+  const index = hashString(getDateDaySeed()) % catalog.length;
+  const featuredApp = catalog[index];
+
+  return {
+    ...featuredApp,
+    isInstalled: installedAppIds.value.has(featuredApp.id),
+    instanceCount: runningAppInstanceCounts.value[featuredApp.id] || 0,
+  };
+});
 
 // System Cleaner Visibility
 const reclaimableStats = computed(() => {
@@ -150,6 +190,22 @@ function formatUptime(container) {
   return formatDuration(uptime);
 }
 
+function getDateDaySeed() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function hashString(value) {
+  let hash = 0;
+  for (let index = 0; index < value.length; index += 1) {
+    hash = (hash * 31 + value.charCodeAt(index)) >>> 0;
+  }
+  return hash;
+}
+
 async function fetchContainers() {
   try {
     const response = await fetch(`${apiUrl.value}/api/containers`);
@@ -175,6 +231,18 @@ async function fetchVolumes() {
     }
   } catch (error) {
     console.error("Failed to fetch volumes:", error);
+  }
+}
+
+async function fetchApps() {
+  try {
+    const response = await fetch(`${apiUrl.value}/api/apps`);
+    const data = await response.json();
+    if (data.success) {
+      apps.value = Array.isArray(data.apps) ? data.apps : [];
+    }
+  } catch (error) {
+    console.error("Failed to fetch apps:", error);
   }
 }
 
@@ -212,9 +280,18 @@ async function refreshAll() {
   await Promise.all([fetchContainers(), fetchVolumes(), fetchImages(), fetchVolumeBrowsers()]);
 }
 
+function viewFeaturedApp(app) {
+  if (!app?.id) return;
+  if ((app.instanceCount || 0) > 0) {
+    router.push(`/app/${app.id}`);
+    return;
+  }
+  router.push(`/apps/${app.id}`);
+}
+
 onMounted(async () => {
   loading.value = true;
-  await refreshAll();
+  await Promise.all([fetchApps(), refreshAll()]);
   loading.value = false;
 
   containersRefreshInterval = setInterval(refreshAll, 10000);
@@ -322,6 +399,14 @@ onUnmounted(() => {
               <Store :size="16" />
               <span>{{ t('home.browseAppStore') }}</span>
             </router-link>
+
+            <div v-if="dailyFeaturedApp" class="mt-8 w-full max-w-xl px-4 text-left">
+              <DailyAppSpotlightCard
+                :app="dailyFeaturedApp"
+                :instance-count="dailyFeaturedApp.instanceCount"
+                @select="viewFeaturedApp(dailyFeaturedApp)"
+              />
+            </div>
           </div>
 
           <!-- Unified Dashboard Grid -->
@@ -392,6 +477,14 @@ onUnmounted(() => {
 
             <div v-if="showMetrics">
               <LogsNavCard />
+            </div>
+
+            <div v-if="activeFilter === 'all' && dailyFeaturedApp" class="sm:col-span-2 lg:col-span-1 xl:col-span-2">
+              <DailyAppSpotlightCard
+                :app="dailyFeaturedApp"
+                :instance-count="dailyFeaturedApp.instanceCount"
+                @select="viewFeaturedApp(dailyFeaturedApp)"
+              />
             </div>
             
             <div v-if="showMetrics">

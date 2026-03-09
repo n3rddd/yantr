@@ -63,6 +63,17 @@
       "images": "Images",
       "temp": "Temp"
     },
+    "dailyAppCard": {
+      "featuredToday": "Featured Today",
+      "subtitle": "A deterministic daily pick from your catalog",
+      "noDescription": "No description available for this app.",
+      "rotatesDaily": "Refreshes every day",
+      "viewApp": "View app",
+      "openOverview": "Open running app",
+      "installed": "Installed",
+      "available": "Available",
+      "running": "Active ({count})"
+    },
     "toolsNavCard": {
       "systemTools": "System Tools",
       "managementLogs": "Management & Logs",
