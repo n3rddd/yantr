@@ -1,4 +1,2 @@
 User-agent: *
 Allow: /
-
-Sitemap: https://yantr.org/sitemap.xml

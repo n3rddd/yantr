@@ -201,29 +201,8 @@ function buildCatalogPage(env, apps, generatedAt) {
   fs.writeFileSync(path.join(catalogDir, 'index.html'), html, 'utf8');
 }
 
-function buildSitemap(apps, generatedAt) {
-  const staticPages = [
-    { url: `${siteUrl}/`, priority: '1.0', changefreq: 'weekly' },
-    { url: `${siteUrl}/catalog/`, priority: '0.9', changefreq: 'daily' },
-    { url: `${siteUrl}/install-docker/`, priority: '0.8', changefreq: 'monthly' },
-  ];
-
-  const appPages = apps.map((app) => ({
-    url: app.appUrl,
-    priority: '0.8',
-    changefreq: 'weekly',
-  }));
-
-  const urls = [...staticPages, ...appPages]
-    .map(({ url, priority, changefreq }) => `  <url>\n    <loc>${url}</loc>\n    <lastmod>${generatedAt}</lastmod>\n    <changefreq>${changefreq}</changefreq>\n    <priority>${priority}</priority>\n  </url>`)
-    .join('\n');
-
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
-  fs.writeFileSync(path.join(websiteDir, 'sitemap.xml'), xml, 'utf8');
-}
-
 function buildRobotsTxt() {
-  const robots = `User-agent: *\nAllow: /\n\nSitemap: ${siteUrl}/sitemap.xml\n`;
+  const robots = `User-agent: *\nAllow: /\n`;
   fs.writeFileSync(path.join(websiteDir, 'robots.txt'), robots, 'utf8');
 }
 
@@ -268,7 +247,6 @@ function buildPages() {
     fs.writeFileSync(path.join(appDir, 'index.html'), html, 'utf8');
   }
 
-  buildSitemap(apps, generatedAt);
   buildRobotsTxt();
 
   console.log(`✨ Generated ${apps.length} app pages in ${appsOutputDir}`);
