@@ -119,21 +119,17 @@ export default async function stacksRoutes(fastify) {
       return a.service.localeCompare(b.service);
     });
 
-    // Find running caddy-yantr containers protecting this app
-    const caddyContainers = await docker.listContainers({
-      all: false,
-      filters: { label: [`yantr.caddy.master=${baseAppId}`] },
-    });
-    const caddyProxies = caddyContainers.map(c => {
-      const projectId = c.Labels?.["com.docker.compose.project"] || null;
-      return {
-        projectId,
-        state: c.State,
-        ports: (c.Ports || [])
-          .filter(p => p.PublicPort)
-          .map(p => ({ hostPort: p.PublicPort, containerPort: p.PrivatePort, protocol: p.Type })),
-      };
-    });
+    // Derive caddy proxy info from labels on the project containers themselves
+    const caddyProxies = projectContainers
+      .filter(c => c.Labels?.['yantr.caddy.enabled'] === 'true')
+      .map(c => ({
+        servePort: Number(c.Labels['yantr.caddy.serve.port']) || null,
+        targetPort: Number(c.Labels['yantr.caddy.target.port']) || null,
+        authEnabled: !!(c.Labels['yantr.caddy.auth.user']),
+        authUser: c.Labels['yantr.caddy.auth.user'] || null,
+        service: c.Labels?.['com.docker.compose.service'] || null,
+      }))
+      .filter(p => p.servePort);
 
     return reply.send({
       success: true,

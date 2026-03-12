@@ -20,6 +20,8 @@ import appsRoutes from "./routes/apps.js";
 import imagesRoutes from "./routes/images.js";
 import volumesRoutes from "./routes/volumes.js";
 import backupRoutes from "./routes/backup.js";
+import proxyRoutes from "./routes/proxy.js";
+import { startCaddy, stopCaddy } from "./caddy.js";
 import { getBrowserPort } from "./dufs.js";
 import http from "node:http";
 
@@ -98,6 +100,7 @@ await fastify.register(appsRoutes);
 await fastify.register(imagesRoutes);
 await fastify.register(volumesRoutes);
 await fastify.register(backupRoutes);
+await fastify.register(proxyRoutes);
 
 // ─── Error handler ────────────────────────────────────────────────────────────
 fastify.setErrorHandler(errorHandler);
@@ -137,6 +140,11 @@ try {
 
   log("info", "🔄 Starting auto-update (self-update scheduler)");
   initAutoUpdate(log);
+
+  log("info", "🔒 Starting embedded Caddy proxy");
+  startCaddy().catch((err) => {
+    log("warn", `⚠️  [CADDY] ${err.message}`);
+  });
 } catch (err) {
   console.error("Failed to start server:", err);
   process.exit(1);
@@ -144,8 +152,9 @@ try {
 
 for (const signal of ["SIGTERM", "SIGINT"]) {
   process.on(signal, () => {
-    log("info", `Received ${signal}, stopping dufs browsers...`);
+    log("info", `Received ${signal}, shutting down...`);
     stopAllBrowsers();
+    stopCaddy();
     process.exit(0);
   });
 }

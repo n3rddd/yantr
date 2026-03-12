@@ -34,17 +34,21 @@ const deploying = ref(false)
 const deployError = ref('')
 const deploySuccess = ref(false)
 
-// Running containers with exposed TCP host ports
+// Running containers with exposed TCP host ports (include projectId for enable call)
 const portOptions = computed(() => {
   const result = []
   for (const c of containers.value) {
     if (c.state !== 'running') continue
+    const projectId = c.labels?.['com.docker.compose.project']
+    if (!projectId) continue
     const ports = Array.isArray(c.ports) ? c.ports : []
     for (const p of ports) {
       if (p.PublicPort && p.Type === 'tcp') {
         result.push({
           label: `${c.name}  :${p.PublicPort}`,
-          value: String(p.PublicPort),
+          value: `${projectId}:${p.PublicPort}`,
+          projectId,
+          targetPort: p.PublicPort,
         })
       }
     }
@@ -52,12 +56,14 @@ const portOptions = computed(() => {
   return result
 })
 
+const selectedOption = computed(() => portOptions.value.find(o => o.value === selectedPort.value) || null)
+
 const caddyRunning = computed(() =>
-  containers.value.some(c => c.appLabels?.app === 'caddy-yantr' && c.state === 'running'),
+  containers.value.some(c => c.labels?.['yantr.caddy.enabled'] === 'true' && c.state === 'running'),
 )
 
 const canDeploy = computed(() =>
-  selectedPort.value &&
+  selectedOption.value &&
   proxyPort.value &&
   authUser.value.trim() &&
   authPass.value.trim() &&
@@ -69,18 +75,15 @@ async function deploy() {
   deploying.value = true
   deployError.value = ''
   try {
-    const res = await fetch(`${apiUrl.value}/api/deploy`, {
+    const res = await fetch(`${apiUrl.value}/api/proxy/enable`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        appId: 'caddy-yantr',
-        environment: {
-          UPSTREAM_PORT: selectedPort.value,
-          AUTH_USER: authUser.value.trim(),
-          AUTH_PASS: authPass.value,
-        },
-        customPortMappings: { '8080/tcp': proxyPort.value },
-        allowMissingDependencies: true,
+        projectId: selectedOption.value.projectId,
+        targetPort: Number(selectedOption.value.targetPort),
+        servePort: Number(proxyPort.value),
+        authUser: authUser.value.trim(),
+        authPass: authPass.value,
       }),
     })
     const data = await res.json()

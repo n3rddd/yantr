@@ -94,52 +94,80 @@ const stackEnvVars = computed(() => {
 });
 
 // ── Caddy Auth deployment ────────────────────────────────────────────────────
-const caddyAuth = ref({ upstreamPort: '', user: 'admin', pass: '' });
+const caddyAuth = ref({ targetPort: '', servePort: '', user: 'admin', pass: '' });
 const deployingCaddy = ref(false);
+const disablingCaddy = ref(false);
 
 const caddyProxies = computed(() => stack.value?.caddyProxies || []);
 
 watch(() => stack.value?.publishedPorts, (ports) => {
-  if (ports?.length && !caddyAuth.value.upstreamPort) {
+  if (ports?.length && !caddyAuth.value.targetPort) {
     const first = ports.find((p) => p.protocol === 'tcp') || ports[0];
-    if (first) caddyAuth.value.upstreamPort = String(first.hostPort);
+    if (first) caddyAuth.value.targetPort = String(first.hostPort);
   }
 }, { immediate: true });
 
 async function deployCaddyAuth() {
   if (deployingCaddy.value) return;
-  if (!caddyAuth.value.pass.trim()) {
-    toast.error(t('stackView.caddyAuthPasswordRequired'));
+  if (!caddyAuth.value.servePort) {
+    toast.error(t('stackView.caddyAuthServePortRequired'));
+    return;
+  }
+  if (!caddyAuth.value.targetPort) {
+    toast.error(t('stackView.caddyAuthTargetPortRequired'));
     return;
   }
   deployingCaddy.value = true;
   toast.info(t('stackView.caddyAuthDeploying'));
   try {
-    const res = await fetch(`${apiUrl.value}/api/deploy`, {
+    const body = {
+      projectId: projectId.value,
+      servePort: Number(caddyAuth.value.servePort),
+      targetPort: Number(caddyAuth.value.targetPort),
+    };
+    if (caddyAuth.value.user.trim() && caddyAuth.value.pass.trim()) {
+      body.authUser = caddyAuth.value.user.trim();
+      body.authPass = caddyAuth.value.pass;
+    }
+    const res = await fetch(`${apiUrl.value}/api/proxy/enable`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        appId: 'caddy-yantr',
-        masterApp: stack.value.appId,
-        environment: {
-          UPSTREAM_HOST: 'host.docker.internal',
-          UPSTREAM_PORT: String(caddyAuth.value.upstreamPort).trim(),
-          AUTH_USER: caddyAuth.value.user.trim() || 'admin',
-          AUTH_PASS: caddyAuth.value.pass,
-        },
-      }),
+      body: JSON.stringify(body),
     });
     const data = await res.json();
     if (data.success) {
       toast.success(t('stackView.caddyAuthDeployed'));
-      router.push('/stacks/caddy-yantr');
+      await fetchStack();
     } else {
-      toast.error(data.message || data.error || t('stackView.caddyAuthFailed'));
+      toast.error(data.error || t('stackView.caddyAuthFailed'));
     }
   } catch (e) {
     toast.error(t('stackView.caddyAuthFailed'));
   } finally {
     deployingCaddy.value = false;
+  }
+}
+
+async function disableCaddyAuth() {
+  if (disablingCaddy.value) return;
+  disablingCaddy.value = true;
+  try {
+    const res = await fetch(`${apiUrl.value}/api/proxy/disable`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ projectId: projectId.value }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      toast.success(t('stackView.caddyAuthDisabled'));
+      await fetchStack();
+    } else {
+      toast.error(data.error || t('stackView.caddyAuthFailed'));
+    }
+  } catch (e) {
+    toast.error(t('stackView.caddyAuthFailed'));
+  } finally {
+    disablingCaddy.value = false;
   }
 }
 
@@ -804,28 +832,28 @@ onUnmounted(() => {
           {{ t('stackView.caddyAuthTitle') }}
         </h2>
 
-        <!-- Running caddy proxies for this app -->
+        <!-- Active proxy badges -->
         <div v-if="caddyProxies.length > 0" class="space-y-2">
           <div class="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-zinc-500 mb-1">{{ t('stackView.caddyProxiesRunning') }}</div>
           <div
             v-for="proxy in caddyProxies"
-            :key="proxy.projectId"
+            :key="proxy.servePort"
             class="flex items-center justify-between gap-3 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 rounded-xl px-4 py-3"
           >
             <div class="flex items-center gap-2 min-w-0">
               <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></div>
-              <router-link
-                :to="`/stacks/${proxy.projectId}`"
-                class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 hover:underline font-mono truncate"
-              >{{ proxy.projectId }}</router-link>
+              <span class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 font-mono">
+                :{{ proxy.servePort }} → localhost:{{ proxy.targetPort }}
+              </span>
+              <span v-if="proxy.authEnabled" class="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-500/30">
+                {{ proxy.authUser }}
+              </span>
             </div>
-            <div class="flex items-center gap-1.5 flex-wrap shrink-0">
-              <span
-                v-for="p in proxy.ports"
-                :key="`${p.hostPort}:${p.containerPort}`"
-                class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-white dark:bg-zinc-900 border border-emerald-200 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-400"
-              >:{{ p.hostPort }}</span>
-            </div>
+            <button
+              @click="disableCaddyAuth"
+              :disabled="disablingCaddy"
+              class="text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded border border-red-200 dark:border-red-500/20 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >{{ disablingCaddy ? '…' : t('stackView.caddyAuthDisable') }}</button>
           </div>
         </div>
 
@@ -840,18 +868,30 @@ onUnmounted(() => {
             </div>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <label class="space-y-1.5">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-zinc-500">{{ t('stackView.caddyAuthUpstreamPort') }}</span>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-zinc-500">{{ t('stackView.caddyAuthTargetPort') }}</span>
               <input
-                v-model="caddyAuth.upstreamPort"
+                v-model="caddyAuth.targetPort"
                 type="number"
                 min="1"
                 max="65535"
-                placeholder="e.g. 3000"
+                placeholder="e.g. 8096"
                 class="w-full px-3 py-2.5 rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/30 font-mono"
               />
-              <p class="text-[11px] text-gray-500 dark:text-zinc-400">{{ t('stackView.caddyAuthUpstreamHint') }}</p>
+              <p class="text-[11px] text-gray-500 dark:text-zinc-400">{{ t('stackView.caddyAuthTargetHint') }}</p>
+            </label>
+            <label class="space-y-1.5">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-zinc-500">{{ t('stackView.caddyAuthServePort') }}</span>
+              <input
+                v-model="caddyAuth.servePort"
+                type="number"
+                min="1024"
+                max="65535"
+                placeholder="e.g. 9096"
+                class="w-full px-3 py-2.5 rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/30 font-mono"
+              />
+              <p class="text-[11px] text-gray-500 dark:text-zinc-400">{{ t('stackView.caddyAuthServeHint') }}</p>
             </label>
             <label class="space-y-1.5">
               <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-zinc-500">{{ t('stackView.caddyAuthUser') }}</span>
@@ -870,13 +910,14 @@ onUnmounted(() => {
                 placeholder="••••••••"
                 class="w-full px-3 py-2.5 rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/30 font-mono"
               />
+              <p class="text-[11px] text-gray-500 dark:text-zinc-400">{{ t('stackView.caddyAuthPassHint') }}</p>
             </label>
           </div>
 
           <div class="flex justify-end">
             <button
               @click="deployCaddyAuth"
-              :disabled="deployingCaddy || !caddyAuth.pass.trim()"
+              :disabled="deployingCaddy || !caddyAuth.servePort || !caddyAuth.targetPort"
               class="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider border border-purple-200 dark:border-purple-500/20 bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-purple-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <ShieldCheck :size="12" :class="deployingCaddy ? 'animate-pulse' : ''" />

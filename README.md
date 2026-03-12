@@ -33,14 +33,14 @@ Launch Yantr in seconds with a single command. Requires Docker.
 ```bash
 docker run -d \
   --name yantr \
-  -p 80:5252 -p 443:5252 \
+  --network host \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v /var/lib/docker/volumes:/var/lib/docker/volumes \
   --restart unless-stopped \
   ghcr.io/besoeasy/yantr
 ```
 
-Navigate to `http://localhost` in your browser. You are ready to go.
+Navigate to `http://localhost:5252` in your browser. You are ready to go.
 
 <br/>
 

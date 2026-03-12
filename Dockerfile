@@ -16,7 +16,7 @@ RUN rm -rf node_modules .npm
 
 FROM docker.io/library/node:alpine
 
-RUN apk add --no-cache docker-cli docker-cli-compose wget restic dufs
+RUN apk add --no-cache docker-cli docker-cli-compose wget restic dufs caddy
 
 WORKDIR /app
 
@@ -30,8 +30,6 @@ COPY --from=builder /app/dist ./dist
 
 COPY daemon/ ./daemon/
 COPY apps/ ./apps/
-
-# Configure
 
 EXPOSE 5252
 
