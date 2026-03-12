@@ -119,6 +119,22 @@ export default async function stacksRoutes(fastify) {
       return a.service.localeCompare(b.service);
     });
 
+    // Find running caddy-yantr containers protecting this app
+    const caddyContainers = await docker.listContainers({
+      all: false,
+      filters: { label: [`yantr.caddy.master=${baseAppId}`] },
+    });
+    const caddyProxies = caddyContainers.map(c => {
+      const projectId = c.Labels?.["com.docker.compose.project"] || null;
+      return {
+        projectId,
+        state: c.State,
+        ports: (c.Ports || [])
+          .filter(p => p.PublicPort)
+          .map(p => ({ hostPort: p.PublicPort, containerPort: p.PrivatePort, protocol: p.Type })),
+      };
+    });
+
     return reply.send({
       success: true,
       stack: {
@@ -127,6 +143,7 @@ export default async function stacksRoutes(fastify) {
         app: catalogEntry ? { name: catalogEntry.name, logo: catalogEntry.logo, tags: catalogEntry.tags, ports: Array.isArray(catalogEntry.ports) ? catalogEntry.ports : [], short_description: catalogEntry.short_description, website: catalogEntry.website, customapp: !!catalogEntry.customapp } : null,
         publishedPorts,
         services,
+        caddyProxies,
       },
     });
   });

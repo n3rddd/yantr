@@ -638,7 +638,8 @@
     "caddyAuthDeploying": "Deploying…",
     "caddyAuthDeployed": "Caddy Auth Proxy deployed!",
     "caddyAuthFailed": "Failed to deploy Caddy Auth Proxy",
-    "caddyAuthPasswordRequired": "Enter a password before deploying."
+    "caddyAuthPasswordRequired": "Enter a password before deploying.",
+    "caddyProxiesRunning": "Active Proxies"
   },
   "appCard": {
     "active": "Active ({count})",

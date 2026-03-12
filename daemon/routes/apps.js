@@ -73,7 +73,7 @@ export default async function appsRoutes(fastify) {
   fastify.post("/api/deploy", async (request, reply) => {
     log("info", "🚀 [POST /api/deploy] Deploy request received");
     try {
-      const { appId, environment, extraEnv, expiresIn, customPortMappings, instanceId, allowMissingDependencies } = request.body;
+      const { appId, environment, extraEnv, expiresIn, customPortMappings, instanceId, allowMissingDependencies, masterApp } = request.body;
       log("info", `🚀 [POST /api/deploy] Deploying app: ${appId}${instanceId > 1 ? ` (Instance #${instanceId})` : ""}`);
 
       if (!appId) {
@@ -148,6 +148,7 @@ export default async function appsRoutes(fastify) {
       appId,
       expiresIn,
       customPortMappings,
+      masterApp: masterApp || null,
       extraEnv: Object.fromEntries(extraEnvEntries.map(([key, value]) => [key.trim(), value])),
     });
     const { composeFile } = await writeProjectCompose(appPath, projectName, modifiedComposeContent);

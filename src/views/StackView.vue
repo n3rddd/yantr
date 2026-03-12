@@ -97,6 +97,8 @@ const stackEnvVars = computed(() => {
 const caddyAuth = ref({ upstreamPort: '', user: 'admin', pass: '' });
 const deployingCaddy = ref(false);
 
+const caddyProxies = computed(() => stack.value?.caddyProxies || []);
+
 watch(() => stack.value?.publishedPorts, (ports) => {
   if (ports?.length && !caddyAuth.value.upstreamPort) {
     const first = ports.find((p) => p.protocol === 'tcp') || ports[0];
@@ -118,6 +120,7 @@ async function deployCaddyAuth() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         appId: 'caddy-yantr',
+        masterApp: stack.value.appId,
         environment: {
           UPSTREAM_HOST: 'host.docker.internal',
           UPSTREAM_PORT: String(caddyAuth.value.upstreamPort).trim(),
@@ -800,6 +803,32 @@ onUnmounted(() => {
           <ShieldCheck :size="12" />
           {{ t('stackView.caddyAuthTitle') }}
         </h2>
+
+        <!-- Running caddy proxies for this app -->
+        <div v-if="caddyProxies.length > 0" class="space-y-2">
+          <div class="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-zinc-500 mb-1">{{ t('stackView.caddyProxiesRunning') }}</div>
+          <div
+            v-for="proxy in caddyProxies"
+            :key="proxy.projectId"
+            class="flex items-center justify-between gap-3 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 rounded-xl px-4 py-3"
+          >
+            <div class="flex items-center gap-2 min-w-0">
+              <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></div>
+              <router-link
+                :to="`/stacks/${proxy.projectId}`"
+                class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 hover:underline font-mono truncate"
+              >{{ proxy.projectId }}</router-link>
+            </div>
+            <div class="flex items-center gap-1.5 flex-wrap shrink-0">
+              <span
+                v-for="p in proxy.ports"
+                :key="`${p.hostPort}:${p.containerPort}`"
+                class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-white dark:bg-zinc-900 border border-emerald-200 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-400"
+              >:{{ p.hostPort }}</span>
+            </div>
+          </div>
+        </div>
+
         <div class="bg-white dark:bg-[#0A0A0A] border border-gray-200 dark:border-zinc-800 rounded-xl p-4 sm:p-5 space-y-4">
           <div class="flex items-start justify-between gap-4">
             <div>

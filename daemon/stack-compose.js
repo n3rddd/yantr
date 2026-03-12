@@ -129,7 +129,7 @@ export function stringifyCompose(compose) {
   return YAML.stringify(compose);
 }
 
-export function applyProjectComposeTransforms(compose, { projectId, appId, expiresIn, customPortMappings, extraEnv }) {
+export function applyProjectComposeTransforms(compose, { projectId, appId, expiresIn, customPortMappings, extraEnv, masterApp }) {
   const instanceId = getInstanceIdFromProjectId(projectId, appId);
   if (instanceId) {
     applyInstanceTransforms(compose, instanceId);
@@ -143,7 +143,19 @@ export function applyProjectComposeTransforms(compose, { projectId, appId, expir
   if (expiresIn) {
     applyExpirationLabels(compose, expiresIn);
   }
+  if (masterApp && typeof masterApp === "string" && masterApp.trim()) {
+    applyCaddyMasterLabel(compose, masterApp.trim());
+  }
   return compose;
+}
+
+function applyCaddyMasterLabel(compose, masterApp) {
+  for (const service of Object.values(compose.services || {})) {
+    if (!service.labels || Array.isArray(service.labels)) {
+      service.labels = {};
+    }
+    service.labels["yantr.caddy.master"] = masterApp;
+  }
 }
 
 export function buildProjectComposeContent(baseComposeContent, options) {

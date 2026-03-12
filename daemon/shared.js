@@ -67,8 +67,9 @@ export async function mapWithConcurrency(items, limit, mapper) {
 export function parseAppLabels(labels) {
   const appLabels = {};
   if (!labels || typeof labels !== "object") return appLabels;
-  if (labels["yantr.app"])     appLabels.app     = labels["yantr.app"];
-  if (labels["yantr.service"]) appLabels.service = labels["yantr.service"];
+  if (labels["yantr.app"])          appLabels.app         = labels["yantr.app"];
+  if (labels["yantr.service"])      appLabels.service     = labels["yantr.service"];
+  if (labels["yantr.caddy.master"]) appLabels.caddyMaster = labels["yantr.caddy.master"];
   return appLabels;
 }
 
