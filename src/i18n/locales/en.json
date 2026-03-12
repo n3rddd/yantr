@@ -626,7 +626,19 @@
     "portOpened": "Opened {portMapping}",
     "failedToOpenPort": "Failed to open port",
     "builtByYantr": "Built by Yantr",
-    "customAppNoUpdate": "This app is custom-built by the Yantr team and does not support automatic updates"
+    "customAppNoUpdate": "This app is custom-built by the Yantr team and does not support automatic updates",
+    "caddyAuthTitle": "Authentication",
+    "caddyAuthHeading": "Protect with Caddy Auth Proxy",
+    "caddyAuthHint": "Deploy a Caddy reverse proxy that adds username/password authentication in front of this app. Caddy will connect to the host port you specify and serve a protected version on a new port.",
+    "caddyAuthUpstreamPort": "App Host Port",
+    "caddyAuthUpstreamHint": "The host port this app is currently exposed on.",
+    "caddyAuthUser": "Username",
+    "caddyAuthPass": "Password",
+    "caddyAuthDeploy": "Deploy Auth Proxy",
+    "caddyAuthDeploying": "Deploying…",
+    "caddyAuthDeployed": "Caddy Auth Proxy deployed!",
+    "caddyAuthFailed": "Failed to deploy Caddy Auth Proxy",
+    "caddyAuthPasswordRequired": "Enter a password before deploying."
   },
   "appCard": {
     "active": "Active ({count})",

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, watch, onMounted, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useApiUrl } from "../composables/useApiUrl";
@@ -9,7 +9,7 @@ import { formatDuration, formatBytes } from "../utils/metrics";
 import {
   ArrowLeft, Globe, ExternalLink, Bot, Activity,
   Terminal, Server, Network, Trash2, RefreshCw, HardDrive, FolderOpen, AlertCircle,
-  Eye, EyeOff, Settings2, ChevronRight, RotateCcw, Plus,
+  Eye, EyeOff, Settings2, ChevronRight, RotateCcw, Plus, ShieldCheck,
 } from "lucide-vue-next";
 
 const route = useRoute();
@@ -92,6 +92,53 @@ const stackEnvVars = computed(() => {
   }
   return [...map.values()].sort((a, b) => a.key.localeCompare(b.key));
 });
+
+// ── Caddy Auth deployment ────────────────────────────────────────────────────
+const caddyAuth = ref({ upstreamPort: '', user: 'admin', pass: '' });
+const deployingCaddy = ref(false);
+
+watch(() => stack.value?.publishedPorts, (ports) => {
+  if (ports?.length && !caddyAuth.value.upstreamPort) {
+    const first = ports.find((p) => p.protocol === 'tcp') || ports[0];
+    if (first) caddyAuth.value.upstreamPort = String(first.hostPort);
+  }
+}, { immediate: true });
+
+async function deployCaddyAuth() {
+  if (deployingCaddy.value) return;
+  if (!caddyAuth.value.pass.trim()) {
+    toast.error(t('stackView.caddyAuthPasswordRequired'));
+    return;
+  }
+  deployingCaddy.value = true;
+  toast.info(t('stackView.caddyAuthDeploying'));
+  try {
+    const res = await fetch(`${apiUrl.value}/api/deploy`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        appId: 'caddy-yantr',
+        environment: {
+          UPSTREAM_HOST: 'host.docker.internal',
+          UPSTREAM_PORT: String(caddyAuth.value.upstreamPort).trim(),
+          AUTH_USER: caddyAuth.value.user.trim() || 'admin',
+          AUTH_PASS: caddyAuth.value.pass,
+        },
+      }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      toast.success(t('stackView.caddyAuthDeployed'));
+      router.push('/stacks/caddy-yantr');
+    } else {
+      toast.error(data.message || data.error || t('stackView.caddyAuthFailed'));
+    }
+  } catch (e) {
+    toast.error(t('stackView.caddyAuthFailed'));
+  } finally {
+    deployingCaddy.value = false;
+  }
+}
 
 // Browse / Backup state
 const browsingVolume = ref({});
@@ -744,6 +791,69 @@ onUnmounted(() => {
         <div v-else class="bg-gray-50 dark:bg-zinc-900/40 border border-dashed border-gray-200 dark:border-zinc-800 rounded-xl px-6 py-5 flex items-center gap-3 text-gray-400 dark:text-zinc-500">
           <Network :size="16" class="shrink-0" />
           <span class="text-xs font-medium">{{ t('stackView.noPortsPublished') }}</span>
+        </div>
+      </div>
+
+      <!-- ── Caddy Auth Proxy ──────────────────────────────────────────────── -->
+      <div v-if="stack.appId !== 'caddy-yantr'" class="space-y-4">
+        <h2 class="text-[10px] font-bold uppercase tracking-widest text-gray-500 dark:text-zinc-500 flex items-center gap-2">
+          <ShieldCheck :size="12" />
+          {{ t('stackView.caddyAuthTitle') }}
+        </h2>
+        <div class="bg-white dark:bg-[#0A0A0A] border border-gray-200 dark:border-zinc-800 rounded-xl p-4 sm:p-5 space-y-4">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div class="text-[11px] font-bold uppercase tracking-wider text-gray-700 dark:text-zinc-300">{{ t('stackView.caddyAuthHeading') }}</div>
+              <p class="mt-1 text-xs text-gray-500 dark:text-zinc-400">{{ t('stackView.caddyAuthHint') }}</p>
+            </div>
+            <div class="hidden sm:flex items-center justify-center w-9 h-9 rounded-lg bg-purple-50 dark:bg-purple-500/10 border border-purple-100 dark:border-purple-500/20 text-purple-500 dark:text-purple-400 shrink-0">
+              <ShieldCheck :size="16" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <label class="space-y-1.5">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-zinc-500">{{ t('stackView.caddyAuthUpstreamPort') }}</span>
+              <input
+                v-model="caddyAuth.upstreamPort"
+                type="number"
+                min="1"
+                max="65535"
+                placeholder="e.g. 3000"
+                class="w-full px-3 py-2.5 rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/30 font-mono"
+              />
+              <p class="text-[11px] text-gray-500 dark:text-zinc-400">{{ t('stackView.caddyAuthUpstreamHint') }}</p>
+            </label>
+            <label class="space-y-1.5">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-zinc-500">{{ t('stackView.caddyAuthUser') }}</span>
+              <input
+                v-model="caddyAuth.user"
+                type="text"
+                placeholder="admin"
+                class="w-full px-3 py-2.5 rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/30 font-mono"
+              />
+            </label>
+            <label class="space-y-1.5">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-zinc-500">{{ t('stackView.caddyAuthPass') }}</span>
+              <input
+                v-model="caddyAuth.pass"
+                type="password"
+                placeholder="••••••••"
+                class="w-full px-3 py-2.5 rounded-lg border border-gray-200 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-900 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500/30 font-mono"
+              />
+            </label>
+          </div>
+
+          <div class="flex justify-end">
+            <button
+              @click="deployCaddyAuth"
+              :disabled="deployingCaddy || !caddyAuth.pass.trim()"
+              class="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider border border-purple-200 dark:border-purple-500/20 bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-400 hover:bg-purple-100 dark:hover:bg-purple-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <ShieldCheck :size="12" :class="deployingCaddy ? 'animate-pulse' : ''" />
+              {{ deployingCaddy ? t('stackView.caddyAuthDeploying') : t('stackView.caddyAuthDeploy') }}
+            </button>
+          </div>
         </div>
       </div>
 
