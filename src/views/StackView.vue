@@ -7,7 +7,6 @@ import { useCurrentTime } from "../composables/useCurrentTime";
 import { useNotification } from "../composables/useNotification";
 import { formatDuration, formatBytes } from "../utils/metrics";
 import {
-  ArrowLeft,
   Globe,
   ExternalLink,
   Bot,
@@ -16,7 +15,6 @@ import {
   Server,
   Network,
   Trash2,
-  RefreshCw,
   HardDrive,
   FolderOpen,
   AlertCircle,
@@ -606,51 +604,6 @@ onUnmounted(() => {
 
 <template>
   <div class="min-h-screen bg-white dark:bg-[#0A0A0A] text-gray-900 dark:text-zinc-100 font-sans selection:bg-blue-500/30">
-    <!-- Header bar -->
-    <header class="bg-white/90 dark:bg-[#0A0A0A]/90 backdrop-blur-xl border-b border-gray-200 dark:border-zinc-800 sticky top-0 z-40 shadow-sm dark:shadow-none">
-      <div class="max-w-6xl mx-auto px-6 sm:px-12 h-16 sm:h-20 flex items-center justify-between">
-        <div class="flex items-center gap-3 sm:gap-5">
-          <button
-            @click="router.back()"
-            class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-gray-50 hover:bg-gray-100 dark:bg-zinc-900 shadow-sm border border-gray-100 dark:border-zinc-800 dark:hover:bg-zinc-800 transition-all duration-300 text-gray-500 dark:text-zinc-400 group focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-          >
-            <ArrowLeft :size="18" class="group-hover:-translate-x-1 transition-transform duration-300" />
-          </button>
-          <div class="h-6 w-px bg-gray-200 dark:bg-zinc-800"></div>
-          <div class="flex flex-col min-w-0">
-            <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-zinc-500">
-              <button @click="router.push('/')" class="hover:text-blue-500 transition-colors">
-                {{ t("stackView.dashboard") }}
-              </button>
-              <span class="text-gray-300 dark:text-zinc-700">/</span>
-              <span>Stack</span>
-            </div>
-            <div class="font-extrabold tracking-tight text-gray-900 dark:text-white text-base sm:text-lg truncate max-w-[200px] sm:max-w-md">
-              {{ stack?.app?.name || projectId }}
-            </div>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-3 sm:gap-4 shrink-0">
-          <!-- State badge -->
-          <div v-if="stack" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest border shadow-sm transition-colors duration-300" :class="stateClass">
-            <span v-if="overallState === 'running'" class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)] animate-pulse"></span>
-            <span v-else-if="overallState === 'partial'" class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.5)] animate-pulse"></span>
-            <span v-else class="w-2 h-2 rounded-full bg-gray-400 shadow-[0_0_8px_rgba(156,163,175,0.5)]"></span>
-            {{ overallState }}
-          </div>
-
-          <!-- Refresh -->
-          <button
-            @click="fetchStack"
-            class="inline-flex items-center justify-center px-3 py-2 h-9 rounded-lg bg-white dark:bg-[#0A0A0A] border border-gray-200 dark:border-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-900 hover:border-gray-300 dark:hover:border-zinc-700 transition-all duration-300 text-gray-600 dark:text-zinc-300 text-xs font-bold uppercase tracking-wider gap-2 group shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-          >
-            <RefreshCw :size="14" class="group-hover:rotate-180 transition-transform duration-500" />
-            <span class="hidden sm:inline">{{ t('stackView.refresh') }}</span>
-          </button>
-        </div>
-      </div>
-    </header>
 
     <!-- Loading -->
     <div v-if="loading" class="flex flex-col items-center justify-center min-h-[60vh]">

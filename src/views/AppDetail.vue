@@ -5,7 +5,7 @@ import { useNotification } from '../composables/useNotification';
 import { useApiUrl } from "../composables/useApiUrl";
 import { usePortConflict } from "../composables/usePortConflict";
 import { useI18n } from "vue-i18n";
-import { Globe, FileCode, ArrowLeft, Package, Clock, Tag, ExternalLink, Activity, Info, AlertTriangle, Check, Terminal, Play, CreditCard, RotateCcw, Download, Plus, X } from "lucide-vue-next";
+import { Globe, FileCode, Package, Clock, Tag, ExternalLink, Activity, Info, AlertTriangle, Check, Terminal, Play, CreditCard, RotateCcw, Download, Plus, X } from "lucide-vue-next";
 import { buildChatGptExplainUrl } from "../utils/chatgpt";
 
 const route = useRoute();
@@ -463,31 +463,6 @@ onMounted(async () => {
 <template>
   <div class="min-h-screen bg-white dark:bg-[#0A0A0A] text-gray-900 dark:text-zinc-100 font-sans selection:bg-blue-500/30">
     
-    <!-- Header -->
-    <header class="bg-white/80 dark:bg-[#0A0A0A]/80 backdrop-blur-md border-b border-gray-200 dark:border-zinc-800 sticky top-0 z-30">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
-        <div class="flex items-center gap-2 sm:gap-4">
-          <router-link to="/apps" class="inline-flex items-center justify-center w-10 h-10 rounded-lg hover:bg-gray-100 dark:hover:bg-zinc-900 transition-all text-gray-500 dark:text-zinc-400 group">
-            <ArrowLeft :size="16" class="group-hover:-translate-x-0.5 transition-transform" />
-          </router-link>
-
-          <div class="h-4 w-px bg-gray-300 dark:bg-zinc-800"></div>
-
-          <div class="flex items-center gap-2.5 text-sm min-w-0">
-            <span class="hidden sm:inline text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-zinc-500">{{ t('appDetail.catalog') }}</span>
-            <span class="hidden sm:inline text-gray-300 dark:text-zinc-700">/</span>
-            <span class="font-semibold tracking-tight text-gray-900 dark:text-white truncate" v-if="app">{{ app.name }}</span>
-            <span v-else class="w-24 h-4 bg-gray-200 dark:bg-zinc-800 animate-pulse rounded"></span>
-          </div>
-        </div>
-
-        <div v-if="isInstalled" class="flex items-center gap-2 px-2.5 py-1 rounded-md border border-green-200 dark:border-green-500/20 bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 text-[10px] font-bold uppercase tracking-wider">
-          <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-          <span>{{ t('appDetail.installed') }}</span>
-        </div>
-      </div>
-    </header>
-
     <!-- Loading State -->
     <div v-if="loading" class="flex flex-col items-center justify-center min-h-[60vh]">
       <div class="w-8 h-8 border-[3px] border-gray-200 dark:border-zinc-800 border-t-blue-500 dark:border-t-blue-500 rounded-full animate-spin mb-6"></div>
