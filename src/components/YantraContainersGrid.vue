@@ -48,6 +48,12 @@ function navigate(group) {
 
 <template>
   <div style="display: contents">
+    <!-- Section Header -->
+    <div class="col-span-full flex items-center gap-2 pt-2 pb-1">
+      <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-secondary)]">{{ t("home.yantrApps") }}</span>
+      <span class="text-[10px] font-bold text-[var(--text-secondary)] opacity-50">{{ appGroups.length }}</span>
+    </div>
+
     <div
       v-for="(group, index) in appGroups"
       :key="group.projectId"
@@ -57,15 +63,8 @@ function navigate(group) {
       @keydown.space.prevent="navigate(group)"
       role="button"
       tabindex="0"
-      class="group relative h-full flex flex-col bg-white dark:bg-[#0A0A0A] rounded-xl overflow-hidden transition-all duration-400 hover:shadow-2xl hover:shadow-black/5 dark:hover:shadow-black/40 hover:-translate-y-1 cursor-pointer animate-fadeIn focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+      class="group relative h-full flex flex-col bg-[var(--surface)] rounded-xl overflow-hidden transition-all duration-300 smooth-shadow hover:smooth-shadow-lg hover:-translate-y-0.5 cursor-pointer animate-fadeIn focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
     >
-      <!-- Hover Accents -->
-      <div class="absolute top-0 left-0 w-full h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-           :class="groupState(group) === 'running' ? 'bg-gradient-to-r from-transparent via-green-500 to-transparent' : 
-                   groupState(group) === 'partial' ? 'bg-gradient-to-r from-transparent via-amber-500 to-transparent' : 
-                   'bg-gradient-to-r from-transparent via-gray-500 to-transparent'">
-      </div>
-      <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMTUwLCAxNTAsIDE1MCwgMC4xKSIvPjwvc3ZnPg==')] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none [mask-image:linear-gradient(to_bottom,white,transparent)]"></div>
 
       <div class="relative z-10 flex flex-col h-full p-5">
         <!-- Header -->
@@ -96,12 +95,12 @@ function navigate(group) {
           </div>
 
           <!-- Logo Container -->
-          <div class="w-12 h-12 rounded-lg bg-gray-50 dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:shadow-md transition-all duration-500 relative">
-            <img v-if="group.logo" :src="group.logo" :alt="group.name" class="w-7 h-7 object-contain filter group-hover:brightness-110 transition-all" loading="lazy" />
-            <Box v-else class="w-6 h-6 text-gray-400 dark:text-zinc-500 group-hover:text-blue-500 transition-colors" />
+          <div class="w-12 h-12 rounded-lg bg-[var(--surface-muted)] flex items-center justify-center shrink-0 group-hover:scale-105 transition-all duration-300 relative">
+            <img v-if="group.logo" :src="group.logo" :alt="group.name" class="w-7 h-7 object-contain group-hover:brightness-110 transition-all" loading="lazy" />
+            <Box v-else class="w-6 h-6 text-[var(--text-secondary)] group-hover:text-blue-500 transition-colors" />
             
-            <div class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-[#0A0A0A]"
-                 :class="groupState(group) === 'running' ? 'bg-green-500 animate-pulse' : groupState(group) === 'partial' ? 'bg-amber-500' : 'bg-gray-400 dark:bg-zinc-600'">
+            <div class="absolute -top-1 -right-1 w-2 h-2 rounded-full"
+                 :class="groupState(group) === 'running' ? 'bg-green-500' : groupState(group) === 'partial' ? 'bg-amber-500' : 'bg-gray-400 dark:bg-zinc-600'">
             </div>
           </div>
         </div>
@@ -109,15 +108,15 @@ function navigate(group) {
         <!-- Services -->
         <div class="flex flex-wrap gap-1.5 mb-6">
           <span v-for="c in group.containers" :key="c.id" 
-                class="text-[10px] font-mono px-2 py-1 rounded-md border flex items-center gap-1.5"
-                :class="c.state === 'running' ? 'bg-gray-50 dark:bg-zinc-900 text-gray-600 dark:text-zinc-300 border-gray-200 dark:border-zinc-800' : 'bg-gray-100/50 dark:bg-zinc-900/50 text-gray-400 dark:text-zinc-500 border-gray-100 dark:border-zinc-800/50'">
+                class="text-[10px] font-mono px-2 py-1 rounded-md flex items-center gap-1.5 bg-[var(--surface-muted)]"
+                :class="c.state === 'running' ? 'text-gray-600 dark:text-zinc-300' : 'text-gray-400 dark:text-zinc-500'">
             <span class="w-1.5 h-1.5 rounded-full shrink-0" :class="c.state === 'running' ? 'bg-green-500' : 'bg-gray-300 dark:bg-zinc-600'"></span>
             <span class="truncate max-w-[120px]">{{ c.app?.service || c.name }}</span>
           </span>
         </div>
 
         <!-- Bottom Action -->
-        <div class="mt-auto pt-4 border-t border-gray-100 dark:border-zinc-800/80 flex items-center justify-between overflow-hidden">
+        <div class="mt-auto pt-4 flex items-center justify-between overflow-hidden">
           <div class="flex items-center gap-1.5 text-gray-400 dark:text-zinc-500 group-hover:text-gray-600 dark:group-hover:text-zinc-300 transition-colors duration-300">
             <span class="text-[10px] font-semibold uppercase tracking-[0.15em]">{{ t("home.yantraContainersGrid.stackView") }}</span>
           </div>

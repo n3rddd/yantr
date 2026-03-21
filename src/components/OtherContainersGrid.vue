@@ -13,6 +13,12 @@ const emit = defineEmits(["select"]);
 
 <template>
   <div style="display: contents">
+    <!-- Section Header -->
+    <div class="col-span-full flex items-center gap-2 pt-2 pb-1">
+      <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-secondary)]">{{ t("home.dockerApps") }}</span>
+      <span class="text-[10px] font-bold text-[var(--text-secondary)] opacity-50">{{ containers.length }}</span>
+    </div>
+
     <div
       v-for="(container, index) in containers"
       :key="`other-${container.id}`"
@@ -22,23 +28,20 @@ const emit = defineEmits(["select"]);
       @keydown.space.prevent="emit('select', container)"
       role="button"
       tabindex="0"
-      class="group relative h-full flex flex-col bg-white dark:bg-[#0A0A0A] rounded-xl overflow-hidden transition-all duration-400 hover:shadow-2xl hover:shadow-black/5 dark:hover:shadow-black/40 hover:-translate-y-1 cursor-pointer animate-fadeIn focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+      class="group relative h-full flex flex-col bg-[var(--surface)] rounded-xl overflow-hidden transition-all duration-300 smooth-shadow hover:smooth-shadow-lg hover:-translate-y-0.5 cursor-pointer animate-fadeIn focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
     >
-      <!-- Hover Accents -->
-      <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-      <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMTUwLCAxNTAsIDE1MCwgMC4xKSIvPjwvc3ZnPg==')] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none [mask-image:linear-gradient(to_bottom,white,transparent)]"></div>
 
       <div class="relative z-10 flex flex-col h-full p-5">
         <div class="flex items-start gap-4 mb-4">
           <!-- Icon -->
           <div class="relative shrink-0">
-             <div class="w-10 h-10 rounded-lg bg-gray-50 dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 flex items-center justify-center group-hover:scale-105 group-hover:border-zinc-700 transition-all duration-500">
-                <Box class="w-5 h-5 text-gray-400 dark:text-zinc-500 group-hover:text-blue-500 transition-colors" />
+             <div class="w-10 h-10 rounded-lg bg-[var(--surface-muted)] flex items-center justify-center group-hover:scale-105 transition-all duration-300">
+                <Box class="w-5 h-5 text-[var(--text-secondary)] group-hover:text-blue-500 transition-colors" />
              </div>
              
              <!-- Status Dot -->
-             <div class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-[#0A0A0A]"
-                  :class="container.state === 'running' ? 'bg-green-500 animate-pulse' : 'bg-gray-400 dark:bg-zinc-600'">
+             <div class="absolute -top-1 -right-1 w-2 h-2 rounded-full"
+                  :class="container.state === 'running' ? 'bg-green-500' : 'bg-gray-400 dark:bg-zinc-600'">
              </div>
           </div>
 
@@ -47,10 +50,10 @@ const emit = defineEmits(["select"]);
               {{ container.name.replace(/^\//, "") }}
             </h3>
             <div class="flex items-center gap-1.5">
-               <div class="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-md"
+               <div class="text-[10px] font-bold uppercase tracking-wider"
                     :class="container.state === 'running'
-                        ? 'bg-green-50/50 dark:bg-green-500/10 text-green-600 dark:text-green-500'
-                        : 'bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-zinc-400'
+                        ? 'text-green-600 dark:text-green-500'
+                        : 'text-[var(--text-secondary)]'
                     ">
                   {{ container.state }}
                </div>
@@ -58,7 +61,7 @@ const emit = defineEmits(["select"]);
           </div>
         </div>
 
-        <div class="mt-auto pt-4 border-t border-gray-100 dark:border-zinc-800/80 flex items-center justify-between overflow-hidden">
+        <div class="mt-auto pt-4 flex items-center justify-between overflow-hidden">
           <div class="flex flex-col min-w-0 pr-4">
              <span class="text-[9px] uppercase font-bold text-gray-400 dark:text-zinc-500 tracking-[0.15em] mb-0.5">{{ t("home.otherContainersGrid.image") }}</span>
              <span class="font-mono text-xs text-gray-600 dark:text-gray-400 truncate" :title="container.image">{{ container.image.split(":")[0] }}</span>

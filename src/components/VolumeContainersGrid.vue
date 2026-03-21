@@ -49,15 +49,18 @@ function getExpirationInfo(browser) {
 
 <template>
   <div style="display: contents">
+    <!-- Section Header -->
+    <div class="col-span-full flex items-center gap-2 pt-2 pb-1">
+      <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-secondary)]">{{ t("home.volumeBrowsers") }}</span>
+      <span class="text-[10px] font-bold text-[var(--text-secondary)] opacity-50">{{ containers.length }}</span>
+    </div>
+
     <div
       v-for="(browser, index) in containers"
       :key="browser.volumeName"
       :style="{ animationDelay: `${index * 50}ms` }"
-      class="group relative h-full flex flex-col bg-white dark:bg-[#0A0A0A] rounded-xl overflow-hidden transition-all duration-400 hover:shadow-2xl hover:shadow-black/5 dark:hover:shadow-black/40 hover:-translate-y-1 animate-fadeIn"
+      class="group relative h-full flex flex-col bg-[var(--surface)] rounded-xl overflow-hidden transition-all duration-300 smooth-shadow hover:smooth-shadow-lg hover:-translate-y-0.5 animate-fadeIn"
     >
-      <!-- Hover Accents -->
-      <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-violet-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-      <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMTUwLCAxNTAsIDE1MCwgMC4xKSIvPjwvc3ZnPg==')] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none [mask-image:linear-gradient(to_bottom,white,transparent)]"></div>
 
       <div class="relative z-10 flex flex-col h-full p-5">
         <div class="flex items-start justify-between mb-4">
@@ -90,11 +93,11 @@ function getExpirationInfo(browser) {
           </div>
           
           <!-- Logo Container -->
-          <div class="w-12 h-12 rounded-lg bg-gray-50 dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:border-zinc-700 transition-all duration-500 relative">
-             <FolderOpen class="w-6 h-6 text-gray-400 dark:text-zinc-500 group-hover:text-violet-500 transition-colors" />
+          <div class="w-12 h-12 rounded-lg bg-[var(--surface-muted)] flex items-center justify-center shrink-0 group-hover:scale-105 transition-all duration-300 relative">
+             <FolderOpen class="w-6 h-6 text-[var(--text-secondary)] group-hover:text-violet-500 transition-colors" />
              
              <!-- Status Dot -->
-             <div class="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-[#0A0A0A] bg-green-500 animate-pulse"></div>
+             <div class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-green-500"></div>
           </div>
         </div>
 
@@ -119,7 +122,7 @@ function getExpirationInfo(browser) {
            </div>
         </div>
 
-        <div class="mt-auto pt-4 border-t border-gray-100 dark:border-zinc-800/80 flex items-center justify-between overflow-hidden">
+        <div class="mt-auto pt-4 flex items-center justify-between overflow-hidden">
           <div class="flex items-center gap-1.5 text-gray-400 dark:text-zinc-500">
             <span class="text-[10px] font-semibold uppercase tracking-[0.15em]">{{ t("home.volumeContainersGrid.volumeBrowser") }}</span>
           </div>

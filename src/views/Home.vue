@@ -3,11 +3,19 @@ import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { Store, LayoutGrid, PackageCheck, Container, FolderOpen, Activity } from "lucide-vue-next";
 
-// Auto-load all widget .vue files from src/Widgets/, shuffle order
+// Auto-load all widget .vue files from src/Widgets/, shuffle once per day
 const widgetModules = import.meta.glob("../Widgets/*.vue", { eager: true });
-const widgets = Object.values(widgetModules)
-  .map((m) => m.default)
-  .sort(() => Math.random() - 0.5);
+function dailyShuffle(arr) {
+  const today = new Date();
+  const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+  const seeded = arr.slice();
+  for (let i = seeded.length - 1; i > 0; i--) {
+    const j = ((seed * (i + 1)) ^ (seed >> 3)) % (i + 1);
+    [seeded[i], seeded[j]] = [seeded[j], seeded[i]];
+  }
+  return seeded;
+}
+const widgets = dailyShuffle(Object.values(widgetModules).map((m) => m.default));
 import { useApiUrl } from "../composables/useApiUrl";
 import { useI18n } from "vue-i18n";
 import YantraContainersGrid from "../components/YantraContainersGrid.vue";
@@ -129,10 +137,10 @@ onUnmounted(() => {
             <button
               @click="activeFilter = 'all'"
               :class="[
-                'px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all flex items-center gap-2 border',
+                'px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all flex items-center gap-2',
                 activeFilter === 'all'
-                  ? 'bg-gray-900 text-white border-gray-900 dark:bg-white dark:text-gray-900 dark:border-white shadow-sm'
-                  : 'bg-white dark:bg-[#0A0A0A] border-gray-200 dark:border-zinc-800 text-gray-600 dark:text-zinc-400 hover:border-gray-300 dark:hover:border-zinc-600',
+                  ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 smooth-shadow'
+                  : 'bg-[var(--surface-muted)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:smooth-shadow',
               ]"
             >
               <LayoutGrid :size="14" />
@@ -142,10 +150,10 @@ onUnmounted(() => {
               v-if="yantrContainers.length > 0"
               @click="activeFilter = 'yantr'"
               :class="[
-                'px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all flex items-center gap-2 border',
+                'px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all flex items-center gap-2',
                 activeFilter === 'yantr'
-                  ? 'bg-gray-900 text-white border-gray-900 dark:bg-white dark:text-gray-900 dark:border-white shadow-sm'
-                  : 'bg-white dark:bg-[#0A0A0A] border-gray-200 dark:border-zinc-800 text-gray-600 dark:text-zinc-400 hover:border-gray-300 dark:hover:border-zinc-600',
+                  ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 smooth-shadow'
+                  : 'bg-[var(--surface-muted)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:smooth-shadow',
               ]"
             >
               <PackageCheck :size="14" />
@@ -155,10 +163,10 @@ onUnmounted(() => {
               v-if="otherContainers.length > 0"
               @click="activeFilter = 'docker'"
               :class="[
-                'px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all flex items-center gap-2 border',
+                'px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all flex items-center gap-2',
                 activeFilter === 'docker'
-                  ? 'bg-gray-900 text-white border-gray-900 dark:bg-white dark:text-gray-900 dark:border-white shadow-sm'
-                  : 'bg-white dark:bg-[#0A0A0A] border-gray-200 dark:border-zinc-800 text-gray-600 dark:text-zinc-400 hover:border-gray-300 dark:hover:border-zinc-600',
+                  ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 smooth-shadow'
+                  : 'bg-[var(--surface-muted)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:smooth-shadow',
               ]"
             >
               <Container :size="14" />
@@ -168,10 +176,10 @@ onUnmounted(() => {
               v-if="volumeContainers.length > 0"
               @click="activeFilter = 'volumes'"
               :class="[
-                'px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all flex items-center gap-2 border',
+                'px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all flex items-center gap-2',
                 activeFilter === 'volumes'
-                  ? 'bg-gray-900 text-white border-gray-900 dark:bg-white dark:text-gray-900 dark:border-white shadow-sm'
-                  : 'bg-white dark:bg-[#0A0A0A] border-gray-200 dark:border-zinc-800 text-gray-600 dark:text-zinc-400 hover:border-gray-300 dark:hover:border-zinc-600',
+                  ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 smooth-shadow'
+                  : 'bg-[var(--surface-muted)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:smooth-shadow',
               ]"
             >
               <FolderOpen :size="14" />
@@ -180,10 +188,10 @@ onUnmounted(() => {
             <button
               @click="activeFilter = 'metrics'"
               :class="[
-                'px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all flex items-center gap-2 border',
+                'px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all flex items-center gap-2',
                 activeFilter === 'metrics'
-                  ? 'bg-gray-900 text-white border-gray-900 dark:bg-white dark:text-gray-900 dark:border-white shadow-sm'
-                  : 'bg-white dark:bg-[#0A0A0A] border-gray-200 dark:border-zinc-800 text-gray-600 dark:text-zinc-400 hover:border-gray-300 dark:hover:border-zinc-600',
+                  ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 smooth-shadow'
+                  : 'bg-[var(--surface-muted)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:smooth-shadow',
               ]"
             >
               <Activity :size="14" />
