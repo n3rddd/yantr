@@ -108,7 +108,7 @@ onUnmounted(() => {
 
 <template>
   <div
-    class="relative group h-full flex flex-col bg-white dark:bg-[#0A0A0A] border border-gray-200 dark:border-zinc-800 rounded-xl overflow-hidden transition-all duration-500 ease-out hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-black/5 dark:hover:shadow-black/40 hover:border-gray-300 dark:hover:border-zinc-600"
+    class="relative group h-full flex flex-col bg-white dark:bg-[#0A0A0A] rounded-xl overflow-hidden transition-all duration-500 ease-out hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-black/5 dark:hover:shadow-black/40"
     @pointermove="onPointerMove"
     @pointerleave="resetPupils(); resumeCycle()"
     @mouseenter="pauseCycle"

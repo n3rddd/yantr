@@ -810,7 +810,7 @@ onUnmounted(() => {
 
         <div
           v-show="activePortTab === 'add'"
-          class="bg-white dark:bg-[#0A0A0A] border border-gray-200 dark:border-zinc-800 rounded-3xl p-8 sm:p-10 space-y-6 hover:shadow-lg hover:border-gray-300 dark:hover:border-zinc-700 transition-all duration-500 ease-out transform group"
+          class="bg-white dark:bg-[#0A0A0A] rounded-3xl p-8 sm:p-10 space-y-6 hover:shadow-lg transition-all duration-500 ease-out transform group"
         >
           <div class="flex items-start justify-between gap-6">
             <div>
@@ -898,7 +898,7 @@ onUnmounted(() => {
             <div
               v-for="(p, i) in visiblePorts"
               :key="i"
-              class="group bg-white dark:bg-[#0A0A0A] border border-gray-200 dark:border-zinc-800 rounded-3xl p-8 hover:-translate-y-2 hover:shadow-xl hover:border-purple-300 dark:hover:border-purple-500/50 transition-all duration-500 ease-out"
+              class="group bg-white dark:bg-[#0A0A0A] rounded-3xl p-8 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 ease-out"
               :style="{ animationDelay: `${i * 100}ms` }"
             >
               <div class="flex items-start gap-5 mb-8">
@@ -1005,7 +1005,7 @@ onUnmounted(() => {
           </div>
 
           <div
-            class="bg-white dark:bg-[#0A0A0A] border border-gray-200 dark:border-zinc-800 rounded-3xl p-8 sm:p-10 space-y-8 hover:shadow-lg hover:border-purple-300 dark:hover:border-purple-500/40 transition-all duration-500 ease-out group"
+            class="bg-white dark:bg-[#0A0A0A] rounded-3xl p-8 sm:p-10 space-y-8 hover:shadow-lg transition-all duration-500 ease-out group"
           >
             <div class="flex items-start justify-between gap-6">
               <div>
@@ -1124,7 +1124,7 @@ onUnmounted(() => {
           <div
             v-for="(vol, i) in namedVolumes"
             :key="vol.name"
-            class="group bg-white dark:bg-[#0A0A0A] border border-gray-200 dark:border-zinc-800 rounded-3xl p-8 sm:p-10 hover:-translate-y-2 hover:shadow-xl hover:border-blue-300 dark:hover:border-zinc-600 transition-all duration-500 ease-out"
+            class="group bg-white dark:bg-[#0A0A0A] rounded-3xl p-8 sm:p-10 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 ease-out"
             :style="{ animationDelay: `${i * 100}ms` }"
           >
             <div class="flex items-start gap-6 mb-8">
@@ -1249,7 +1249,7 @@ onUnmounted(() => {
           {{ t("stackView.bindMounts") }}
         </h2>
         <div
-          class="overflow-x-auto bg-white dark:bg-[#0A0A0A] rounded-3xl border border-gray-200 dark:border-zinc-800 shadow-sm hover:shadow-lg transition-shadow duration-500"
+          class="overflow-x-auto bg-white dark:bg-[#0A0A0A] rounded-3xl shadow-sm hover:shadow-lg transition-shadow duration-500"
         >
           <table class="w-full text-left min-w-120">
             <thead>
@@ -1307,7 +1307,7 @@ onUnmounted(() => {
             v-for="(svc, i) in stack.services"
             :key="svc.id"
             @click="router.push(`/containers/${svc.id}`)"
-            class="group cursor-pointer bg-white dark:bg-[#0A0A0A] border border-gray-200 dark:border-zinc-800 rounded-3xl p-8 sm:p-10 hover:border-blue-400 dark:hover:border-blue-500/60 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 ease-out"
+            class="group cursor-pointer bg-white dark:bg-[#0A0A0A] rounded-3xl p-8 sm:p-10 hover:-translate-y-2 hover:shadow-xl transition-all duration-500 ease-out"
             :style="{ animationDelay: `${i * 100}ms` }"
           >
             <!-- Top row: icon + name/image + uptime -->

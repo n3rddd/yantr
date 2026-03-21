@@ -25,7 +25,7 @@ const tools = [
 </script>
 
 <template>
-  <div class="relative group isolate h-full flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-500 hover:-translate-y-1 hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-500/10 dark:border-zinc-800 dark:bg-[#0A0A0A] dark:hover:border-blue-500/30 dark:hover:shadow-black/40">
+  <div class="relative group isolate h-full flex flex-col overflow-hidden rounded-2xl bg-white transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/10 dark:bg-[#0A0A0A] dark:hover:shadow-black/40">
     <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
       <div class="absolute inset-x-0 top-0 h-0.5 bg-blue-500 opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
       <div class="absolute -left-10 top-8 h-28 w-28 rounded-full bg-blue-500/10 blur-2xl pulse-cloud"></div>

@@ -117,7 +117,7 @@ const stateLabel = computed(() => {
     v-if="dailyApp"
     type="button"
     @click="handleSelect"
-    class="relative group h-full w-full flex flex-col overflow-hidden rounded-xl border border-gray-200 dark:border-zinc-800 bg-white dark:bg-[#0A0A0A] text-left transition-all duration-400 hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-2xl hover:shadow-black/5 dark:hover:border-zinc-600 dark:hover:shadow-black/40"
+    class="relative group h-full w-full flex flex-col overflow-hidden rounded-xl bg-white dark:bg-[#0A0A0A] text-left transition-all duration-400 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-black/5 dark:hover:shadow-black/40"
   >
     <div class="absolute inset-x-0 top-0 h-0.5 bg-linear-to-r from-transparent via-amber-500 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(251,191,36,0.12),transparent_38%)] opacity-70"></div>
