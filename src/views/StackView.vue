@@ -211,7 +211,7 @@ const showRestoreMenu = ref({});
 const activePortTab = ref("list"); // 'list' | 'add' | 'caddy'
 
 // Top-level section navigation
-const activeSection = ref("containers"); // 'network' | 'containers' | 'storage' | 'config'
+const activeSection = ref("network"); // 'network' | 'containers' | 'storage' | 'config'
 
 // Build a port-number → {label, protocol} lookup from the info.json ports array
 function buildPortLabels(ports) {
@@ -717,8 +717,8 @@ onUnmounted(() => {
       <div class="flex gap-1 p-1 rounded-xl" style="background: var(--surface-muted)">
         <button
           v-for="sec in [
-            { id: 'containers', label: t('stackView.containers'), icon: Server },
             { id: 'network', label: t('stackView.networkAccess'), icon: Network },
+            { id: 'containers', label: t('stackView.containers'), icon: Server },
             ...(namedVolumes.length > 0 || otherMounts.length > 0 ? [{ id: 'storage', label: t('stackView.storageVolumes'), icon: HardDrive }] : []),
             ...(stackEnvVars.length > 0 ? [{ id: 'config', label: t('stackView.configurationVariables'), icon: Settings2 }] : []),
           ]"
