@@ -1,6 +1,6 @@
 {
   "name": "L-Town",
-  "logo": "QmYwAPJzv5CZsnAzt8auVZRn7F6wQ4y2b4Bw9vVQpJYV5M",
+  "logo": "QmamhV9FcGDvdmxDeEcV2RH28kNRnEFEZy75fCGfuvgMSc",
   "tags": ["self-hosted", "web", "multiplayer", "game", "p2p", "rust"],
   "ports": [{ "port": 30300, "protocol": "HTTP", "label": "Web UI" }],
   "short_description": "Lightweight self-hosted L-Town server exposing a single web port.",
