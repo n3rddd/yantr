@@ -15,7 +15,7 @@
     { "port": 80, "protocol": "HTTP", "label": "Web UI" }
   ],
   "short_description": "Feature-rich Matrix client for secure, decentralized chat, voice, and video communication.",
-  "description": "Element (formerly Riot.im) is a secure, decentralized chat application built on the Matrix open protocol. It provides end-to-end encrypted messaging, group chats, voice and video calls, and integration with the broader Matrix network. Features include direct messages and group rooms, end-to-end encryption by default, message history synchronization across devices, file sharing, threaded conversations, bridges to other chat networks (Slack, Discord, Telegram), and the ability to host your own server (homeserver) for complete control. It's a privacy-focused alternative to Discord, Slack, and WhatsApp.",
+  "description": "Element is a Matrix-based secure, decentralized chat client providing end-to-end encrypted messaging, group rooms, voice and video calls, file sharing, and bridges to other networks. Host your own homeserver for full control and synchronized history across devices.",
   "usecases": [
     "Set up a private family chat server with end-to-end encryption.",
     "Create a team communication platform for your projects without data leaving your infrastructure.",

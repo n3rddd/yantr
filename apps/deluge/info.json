@@ -13,7 +13,7 @@
     { "port": 8112, "protocol": "HTTP", "label": "Web UI" }
   ],
   "short_description": "Full-featured cross-platform BitTorrent client with plugin support.",
-  "description": "Deluge is a lightweight, full-featured BitTorrent client that can run as a daemon with web interface. Features include plugin system for extended functionality, web UI, remote management, DHT, peer exchange, encryption, bandwidth scheduling, and RSS support. Cross-platform with low memory usage. The LinuxServer.io image includes the Deluge daemon with web UI.",
+  "description": "Deluge is a lightweight BitTorrent client that runs as a daemon with a web UI. It provides a plugin system, remote management, DHT and peer exchange, encryption, bandwidth scheduling, and RSS support—suitable for low-memory servers.",
   "usecases": [
     "Download torrents with powerful client.",
     "Use plugins for extended features.",

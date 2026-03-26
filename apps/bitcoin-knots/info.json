@@ -15,7 +15,7 @@
     { "port": 8333, "protocol": "TCP", "label": "P2P" }
   ],
   "short_description": "Full Bitcoin node with enhanced features, mempool visualization, and wallet support.",
-  "description": "Bitcoin Knots is a full Bitcoin node implementation with additional features beyond the reference client. It provides complete verification of the entire blockchain, enabling you to use Bitcoin without trusting third parties. Features include wallet functionality for sending/receiving BTC, full mempool visualization, RBF (Replace-By-Fee) support, advanced transaction fee estimation, custom filters for SPV clients, and access to network statistics. Running your own node gives you maximum privacy and security - you verify all transactions yourself without leaking addresses to block explorers.",
+  "description": "Bitcoin Knots is a full Bitcoin node implementation providing complete blockchain verification. It includes wallet features, mempool visualization, advanced fee estimation, Replace-By-Fee support, SPV filters, and network statistics—enabling privacy-preserving, self-verified Bitcoin usage.",
   "usecases": [
     "Run a full Bitcoin node for maximum privacy and security.",
     "Verify transactions without trusting block explorers.",

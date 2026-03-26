@@ -14,7 +14,7 @@
     { "port": 5000, "protocol": "HTTP", "label": "Web UI" }
   ],
   "short_description": "Application dashboard with bookmarks, media discovery, and sleek UI.",
-  "description": "Dashmachine is a slick application dashboard with features beyond just bookmarks. It includes media discovery (movies, TV), organizational apps with real-time data, bookmarks with favicon fetching, and a beautiful interface. Features include dark/light themes, drag-and-drop organization, embedded media information, and easy configuration through web UI.",
+  "description": "Dashmachine is an application dashboard for organizing bookmarks and homelab services with media discovery. It offers drag-and-drop layout, favicon fetching, dark/light themes, embedded media information, and easy web UI configuration for a polished home screen.",
   "usecases": [
     "Organize bookmarks with auto-fetched icons.",
     "Track media with embedded information.",

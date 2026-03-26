@@ -14,7 +14,7 @@
     { "port": 8989, "protocol": "HTTP", "label": "Web UI" }
   ],
   "short_description": "Self-hosted file manager with upload, download, sharing, and collaboration features.",
-  "description": "Droppy is a self-hosted file manager that provides an interface for uploading, downloading, organizing, and sharing files. Features include multi-file upload, folder creation, file preview, sharing via links, user authentication, activity log, and a clean responsive UI. Perfect for simple file hosting or sharing files with family and friends.",
+  "description": "Droppy is a self-hosted file manager for uploading, downloading, organizing, and sharing files. It supports multi-file uploads, folder creation, previews, shareable links, user authentication, and activity logs, offering a clean responsive UI for small groups.",
   "usecases": [
     "Share files with generate shareable links.",
     "Upload and organize files through browser.",

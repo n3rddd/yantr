@@ -14,7 +14,7 @@
     { "port": 8200, "protocol": "HTTP", "label": "Web UI" }
   ],
   "short_description": "Free, open-source backup tool with encryption, deduplication, and cloud storage support.",
-  "description": "Duplicati is a free, open-source backup client that stores encrypted, incremental backups to cloud storage services or local drives. It works with a wide range of protocols including SFTP, FTP, WebDAV, and cloud providers. Features include AES-256 encryption, source-code deduplication to reduce storage, backup scheduling, retention policies, version history, email notifications, and a powerful web interface. Perfect for setting up automated backups of your server data to local NAS, remote servers, or cloud storage - all with strong encryption so even the backup location can't read your data.",
+  "description": "Duplicati is an open-source backup client that creates encrypted, incremental backups to local or cloud storage. It supports SFTP, WebDAV, S3/B2, AES-256 encryption, deduplication, scheduling, retention policies, version history, and a web UI for restores and management.",
   "usecases": [
     "Automated encrypted backups of your server to local NAS or remote storage.",
     "Backup to multiple destinations (local + cloud) for redundancy.",

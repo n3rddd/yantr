@@ -8,7 +8,7 @@
     "privacy",
     "adblock",
     "self-hosted",
-    " parental-control",
+    "parental-control",
     "dhcp"
   ],
   "ports": [
@@ -18,7 +18,7 @@
     { "port": 853, "protocol": "TCP", "label": "DNS-over-TLS" }
   ],
   "short_description": "Network-wide DNS server that blocks ads, trackers, and malicious domains at the DNS level.",
-  "description": "AdGuard Home is a powerful network-wide DNS server that acts as a centralized ad blocker and privacy protection tool. It blocks ads, trackers, malware, and phishing domains at the DNS level before they can reach your devices. Features include DNSSEC validation, customizable filter lists, parental controls with adult content blocking and safe search enforcement, query logging with statistics dashboard, DHCP server support, and encrypted DNS protocols (DoT, DoH, DoQ). Unlike browser-based ad blockers, AdGuard Home protects all devices on your network without requiring any client-side software.",
+  "description": "AdGuard Home is a network-wide DNS server that blocks ads, trackers, and malicious domains before they reach your devices. It provides DNSSEC validation, customizable filter lists, parental controls, DHCP support, query logging, and encrypted DNS (DoT/DoH/DoQ).",
   "usecases": [
     "Block ads and trackers across all devices on your home network (phones, tablets, TVs, IoT devices) by configuring your router to use AdGuard Home as its DNS server.",
     "Protect children from inappropriate content by enabling parental controls to block adult websites, enforce safe search, and schedule blocking times.",

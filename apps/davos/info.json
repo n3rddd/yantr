@@ -14,7 +14,7 @@
     { "port": 8080, "protocol": "HTTP", "label": "Web UI" }
   ],
   "short_description": "Web-based download manager with queue, scheduling, and FTP/SFTP support.",
-  "description": "Davos is a web-based FTP/SFTP download manager that allows you to manage downloads from remote servers. Features include FTP/SFTP support, download queue, scheduling, automatic retry, folder watching, and a clean web interface. Perfect for downloading large files or managing bulk downloads from remote servers.",
+  "description": "Davos is a web-based FTP/SFTP download manager with a clean UI. It supports download queues, scheduling, automatic retries, folder watching, and bulk file management—useful for large or scheduled downloads from remote servers.",
   "usecases": [
     "Download files from FTP/SFTP servers.",
     "Queue downloads for later.",

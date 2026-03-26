@@ -14,7 +14,7 @@
     { "port": 5001, "protocol": "HTTP", "label": "Web UI" }
   ],
   "short_description": "Elegant Docker Compose management UI for creating and managing stacks interactively.",
-  "description": "Dockge is a beautiful, user-friendly alternative to Portainer specifically designed for managing Docker Compose stacks. It provides an interactive editor for writing docker-compose.yml files with syntax highlighting, a visual interface for managing services (start, stop, restart, logs), stack management, and easy interaction with the compose.yaml format. Features include compose.yaml editor with autocomplete, one-click stack deployment, service management (logs, shell, restart), and a clean modern interface. Perfect for those who prefer Docker Compose but want a visual tool.",
+  "description": "Dockge is a Docker Compose-focused management UI offering a visual editor with syntax highlighting, one-click stack deployment, and service controls (start/stop/restart, logs, shell). It simplifies managing compose-based projects with a clean, user-friendly interface.",
   "usecases": [
     "Create and edit docker-compose.yml files with a visual editor.",
     "Manage your compose stacks - start, stop, restart services.",
