@@ -1,6 +1,6 @@
 services:
   tor:
-    image: docker.io/torproject/tor:0.4.8.10
+    image: containers.torproject.org/tpo/onion-services/onimages/tor:alpine
     container_name: cashu-me-tor
     labels:
       yantr.app: "cashu-me"
