@@ -17,7 +17,7 @@
     <style>
       .bg-grid-pattern {
         background-color: #ffffff;
-        background-image: linear-gradient(#f1f5f9 1px, transparent 1px), linear-gradient(90deg, #f1f5f9 1px, transparent 1px);
+        background-image: none;
         background-size: 20px 20px;
       }
       .tab-btn.active {
@@ -51,7 +51,7 @@
   </head>
 
   <body class="bg-white text-black dark:bg-zinc-950 dark:text-zinc-100 font-mono antialiased selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black relative">
-    <div class="absolute inset-0 -z-10 bg-grid-pattern mask-[linear-gradient(to_bottom,white,transparent)] h-195 pointer-events-none dark:hidden"></div>
+    <div class="absolute inset-0 -z-10 bg-grid-pattern h-195 pointer-events-none dark:hidden"></div>
     <main class="w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       <div class="w-full max-w-6xl mx-auto">
         <div class="max-w-4xl">
@@ -106,7 +106,7 @@
           <h2 class="text-xs uppercase tracking-[0.2em] text-gray-400 dark:text-zinc-500 mb-4">Install guide</h2>
 
           <!-- Platform tabs -->
-          <div class="flex flex-wrap gap-2 mb-6 rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-950/80 backdrop-blur p-3">
+          <div class="flex flex-wrap gap-2 mb-6 rounded-2xl border border-gray-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-950/80 p-3">
             <button data-tab="windows" class="tab-btn active text-[11px] uppercase tracking-wider px-3 py-1.5 border border-gray-300 dark:border-zinc-700 hover:border-black dark:hover:border-white transition-colors rounded-md">Windows 11</button>
             <button data-tab="macos" class="tab-btn text-[11px] uppercase tracking-wider px-3 py-1.5 border border-gray-300 dark:border-zinc-700 hover:border-black dark:hover:border-white transition-colors rounded-md">macOS</button>
             <button data-tab="linux-desktop" class="tab-btn text-[11px] uppercase tracking-wider px-3 py-1.5 border border-gray-300 dark:border-zinc-700 hover:border-black dark:hover:border-white transition-colors rounded-md">Linux Desktop</button>

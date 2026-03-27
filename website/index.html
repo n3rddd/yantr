@@ -41,9 +41,8 @@
         scrollbar-width: none;
       }
       .glass-effect {
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 1);
+        border: 1px solid rgba(0, 0, 0, 0.04);
       }
       @keyframes twinkle {
         0%,
@@ -209,7 +208,7 @@
         right: 0;
         bottom: -1px;
         height: 2px;
-        background: linear-gradient(90deg, #000, #555);
+        background: #111;
         transform: scaleX(0);
         transform-origin: left;
         transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -230,7 +229,7 @@
         left: 10%;
         right: 10%;
         height: 2px;
-        background: linear-gradient(90deg, transparent, #111, transparent);
+        background: #111;
         transform: scaleX(0);
         transform-origin: center;
         transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -326,7 +325,7 @@
       .arch-line {
         position: relative;
         height: 2px;
-        background: linear-gradient(90deg, #d1d5db, #9ca3af, #d1d5db);
+        background: #9ca3af;
         overflow: hidden;
       }
       .arch-line-dot {
@@ -342,7 +341,7 @@
       .arch-line-vertical {
         position: relative;
         width: 2px;
-        background: linear-gradient(180deg, #d1d5db, #9ca3af, #d1d5db);
+        background: #9ca3af;
         overflow: hidden;
       }
       .arch-line-dot-vertical {
@@ -396,7 +395,7 @@
           <div class="flex flex-col items-center text-center">
             <a
               href="./install-docker.html"
-              class="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/80 backdrop-blur px-3 py-1.5 mb-6 text-xs font-semibold tracking-wide text-gray-600 uppercase animate-fade-in-up hover:border-gray-400 transition-colors"
+              class="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white/80 px-3 py-1.5 mb-6 text-xs font-semibold tracking-wide text-gray-600 uppercase animate-fade-in-up hover:border-gray-400 transition-colors"
             >
               <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
               Homelab App Store · Docker-powered
@@ -451,7 +450,7 @@
           </div>
 
           <div class="w-full max-w-4xl mt-12 animate-fade-in-up delay-200" id="install">
-            <div class="relative overflow-hidden rounded-2xl border border-gray-200 bg-white/70 backdrop-blur-xl shadow-lg shadow-gray-200/40">
+            <div class="relative overflow-hidden rounded-2xl border border-gray-200 bg-white/70 shadow-lg shadow-gray-200/40">
               <div class="px-6 py-6 sm:px-8 sm:py-8">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-5 gap-4">
                   <div>
@@ -472,7 +471,7 @@
 
                 <div class="relative group">
                   <div
-                    class="absolute inset-0 bg-linear-to-r from-gray-50 to-gray-100/50 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none border border-gray-200/50"
+                    class="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none border border-gray-200/50"
                   ></div>
 
                   <div class="relative flex items-stretch">
@@ -540,11 +539,11 @@
             <!-- Edge fade masks -->
             <div
               class="pointer-events-none absolute inset-y-0 left-0 w-32 sm:w-48 z-10"
-              style="background: linear-gradient(to right, white 0%, transparent 100%)"
+              style="background: none;"
             ></div>
             <div
               class="pointer-events-none absolute inset-y-0 right-0 w-32 sm:w-48 z-10"
-              style="background: linear-gradient(to left, white 0%, transparent 100%)"
+              style="background: none;"
             ></div>
 
             <div id="hero-fc-track-1" class="feature-scroll-track flex items-stretch gap-4 pr-4"></div>
@@ -565,11 +564,11 @@
         <!-- Edge fade masks -->
         <div
           class="pointer-events-none absolute inset-y-0 left-0 w-32 sm:w-48 z-10"
-          style="background: linear-gradient(to right, white 0%, transparent 100%)"
+          style="background: none;"
         ></div>
         <div
           class="pointer-events-none absolute inset-y-0 right-0 w-32 sm:w-48 z-10"
-          style="background: linear-gradient(to left, white 0%, transparent 100%)"
+          style="background: none;"
         ></div>
 
         <!-- Headline -->
@@ -955,7 +954,7 @@
             <div class="absolute inset-0 bg-gray-200 animate-pulse" id="screenshot-loader"></div>
             <img id="screenshot-img" src="" alt="Yantr Interface" class="w-full h-auto opacity-0 transition-opacity duration-700 relative z-10" />
             <div
-              class="absolute bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur border-t border-gray-200 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20"
+              class="absolute bottom-0 left-0 right-0 p-4 bg-white/90 border-t border-gray-200 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20"
             >
               <p id="screenshot-caption" class="text-sm font-medium text-black font-mono text-center"></p>
             </div>
@@ -1855,7 +1854,7 @@
             if (!logoUrl) continue;
 
             const el = document.createElement("div");
-            el.className = "star-icon absolute flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/40 backdrop-blur-md shadow-sm border border-white/20";
+            el.className = "star-icon absolute flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/40 shadow-sm border border-white/20";
 
             // Spread icons across full document width and height
             el.style.left = Math.floor(Math.random() * 88) + 2 + "%";
