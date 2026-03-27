@@ -11,7 +11,6 @@ services:
         ipv4_address: 172.30.0.2
     volumes:
       - tor-keys:/var/lib/tor
-      - ./torrc:/etc/tor/torrc:ro
 
   web:
     build:
